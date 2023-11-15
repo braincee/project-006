@@ -8,21 +8,14 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { utf8ToBytes } from 'web3-utils'
+import { uuidV4 } from 'web3-utils'
 
-export default function Utf8ToBytes() {
-  const [str, setStr] = useState('')
-
-  const [output, setOutput] = useState<number[]>([])
+export default function UuidV4() {
+  const [output, setOutput] = useState('')
 
   useEffect(() => {
-    if (!str || str === '') {
-      setOutput([])
-      return
-    }
-    let bytesArray = utf8ToBytes(str)
-    setOutput([...bytesArray])
-  }, [str])
+    setOutput(uuidV4())
+  }, [])
 
   return (
     <Stack
@@ -34,34 +27,6 @@ export default function Utf8ToBytes() {
       height={'100%'}
       alignItems={'center'}
     >
-      <Sheet
-        sx={{
-          height: '100%',
-          width: '100%',
-          maxWidth: {
-            md: '50%',
-            sm: '100%',
-          },
-          alignSelf: 'center',
-        }}
-      >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>str</FormLabel>
-          <Input
-            name='utf8ToByte'
-            placeholder={'Native web3js "str" parameter.'}
-            onChange={(e) => setStr(e.target.value)}
-            type='text'
-          />
-        </FormControl>
-      </Sheet>
-
       <Sheet
         sx={{
           height: '100%',
@@ -92,7 +57,7 @@ export default function Utf8ToBytes() {
             maxWidth: '90%',
           }}
         >
-          {(output.length > 0 && `[${output.toString()}]`) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

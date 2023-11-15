@@ -8,9 +8,9 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { uint8ArrayEquals } from 'web3-utils'
+import { uint8ArrayConcat } from 'web3-utils'
 
-export default function Uint8ArrayEquals() {
+export default function Uint8ArrayConcat() {
   const [byteA, setByteA] = useState<Uint8Array>()
   const [byteB, setByteB] = useState<Uint8Array>()
 
@@ -85,18 +85,9 @@ export default function Uint8ArrayEquals() {
         <FormControl size='lg' required={true}>
           <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
           <Input
-            name='bytesA'
+            name='bytes'
             placeholder={'12, 34, 56, 78'}
-            onChange={handleByteAChange}
-            type='string'
-          />
-        </FormControl>
-        <FormControl size='lg' required={true}>
-          <FormLabel>bytes B Eg. "12, 34, 56, 78"</FormLabel>
-          <Input
-            name='bytesB'
-            placeholder={'12, 34, 56, 78'}
-            onChange={handleByteBChange}
+            onChange={handleChange}
             type='string'
           />
         </FormControl>

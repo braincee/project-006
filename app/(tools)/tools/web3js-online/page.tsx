@@ -2,9 +2,12 @@ import FunctionContainer from '@/components/FunctionContainer'
 import AsciiToHex from '@/components/web3js/AsciiToHex'
 import BytesToHex from '@/components/web3js/BytesToHex'
 import ConvertScalarValue from '@/components/web3js/ConvertScalarValue'
+import ToWei from '@/components/web3js/ToWei'
 import Uint8ArrayEquals from '@/components/web3js/Uint8ArrayEquals'
 import Utf8ToBytes from '@/components/web3js/Utf8ToBytes'
 import Utf8ToHex from '@/components/web3js/Utf8ToHex'
+import UuidV4 from '@/components/web3js/UuidV4'
+
 import {
   Accordion,
   AccordionDetails,
@@ -47,6 +50,20 @@ export default async function Web3JsOnline() {
         overflow={'scroll'}
         spacing={2}
       >
+        <FunctionContainer
+          title='web3.toWei'
+          description='Convert a number of a unit to wei'
+        >
+          <ToWei />
+        </FunctionContainer>
+
+        <FunctionContainer
+          title='web3.uuidV4'
+          description='Generate a version 4 (random) uuid '
+        >
+          <UuidV4 />
+        </FunctionContainer>
+
         <FunctionContainer
           title='web3.uint8ArrayEquals'
           description='Convert a utf8 string to Bytes.'
