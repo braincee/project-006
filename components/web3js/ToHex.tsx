@@ -3,43 +3,46 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Option,
+  Select,
   Sheet,
   Stack,
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { uint8ArrayConcat } from 'web3-utils'
+import { toHex } from 'web3-utils'
 
-export default function Uint8ArrayConcat() {
-  const [byteA, setByteA] = useState<Uint8Array>()
-  const [byteB, setByteB] = useState<Uint8Array>()
+export default function ToHex() {
+  const [str, setStr] = useState<any>()
+  const [type, setType] = useState(false)
 
-  const [output, setOutput] = useState<boolean>()
+  const [output, setOutput] = useState('')
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setByteA(undefined)
+      setStr(undefined)
       return
     }
+    setStr(value)
+  }
 
-    const bytesArray = value
-      .split(',')
-      .map((byte: string) => Number(byte.trim()))
-
-    // finally, convert the array of numbers to a Uint8Array
-    const bytesUint8Array = Uint8Array.from(bytesArray)
-
-    setByteA(bytesUint8Array)
+  const handleSelect = (
+    event: React.SyntheticEvent | null,
+    newValue: boolean | null
+  ) => {
+    if (!newValue) return
+    setType(newValue)
   }
 
   useEffect(() => {
-    if (!byteA || !byteB || byteA.length === 0 || byteB.length === 0) {
-      setOutput(undefined)
+    if (!str || str === '') {
+      setOutput('')
       return
     }
-  }, [byteA, byteB])
+    setOutput(toHex(str, type))
+  }, [str])
 
   return (
     <Stack
@@ -62,14 +65,37 @@ export default function Uint8ArrayConcat() {
           alignSelf: 'center',
         }}
       >
-        <FormControl size='lg' required={true}>
-          <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
+        <FormControl
+          size='lg'
+          required={true}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>
+            string| number | bigint | boolean | object | Uint8Array
+          </FormLabel>
           <Input
-            name='bytes'
-            placeholder={'12, 34, 56, 78'}
+            name='toHex'
+            placeholder={'Native web3js "str | number" parameter.'}
             onChange={handleChange}
             type='string'
           />
+        </FormControl>
+        <FormControl
+          size='lg'
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>str | Bytes Eg. "12, 34, 56, 78"</FormLabel>
+          <Select
+            placeholder={'Native web3js "boolean" parameter.'}
+            onChange={handleSelect}
+          >
+            <Option value={true}>TRUE</Option>
+            <Option value={false}>FALSE</Option>
+          </Select>
         </FormControl>
       </Sheet>
 
@@ -103,7 +129,7 @@ export default function Uint8ArrayConcat() {
             maxWidth: '90%',
           }}
         >
-          {(output !== undefined && output.toString()) ||
+          {(output && output.toString()) ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

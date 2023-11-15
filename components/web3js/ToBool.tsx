@@ -8,11 +8,10 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { uint8ArrayConcat } from 'web3-utils'
+import { toBool } from 'web3-utils'
 
-export default function Uint8ArrayConcat() {
-  const [byteA, setByteA] = useState<Uint8Array>()
-  const [byteB, setByteB] = useState<Uint8Array>()
+export default function ToBool() {
+  const [str, setStr] = useState<any>()
 
   const [output, setOutput] = useState<boolean>()
 
@@ -20,26 +19,19 @@ export default function Uint8ArrayConcat() {
     const value = event.target.value
 
     if (!value || value === '') {
-      setByteA(undefined)
+      setStr(undefined)
       return
     }
-
-    const bytesArray = value
-      .split(',')
-      .map((byte: string) => Number(byte.trim()))
-
-    // finally, convert the array of numbers to a Uint8Array
-    const bytesUint8Array = Uint8Array.from(bytesArray)
-
-    setByteA(bytesUint8Array)
+    setStr(value)
   }
 
   useEffect(() => {
-    if (!byteA || !byteB || byteA.length === 0 || byteB.length === 0) {
+    if (!str || str === '') {
       setOutput(undefined)
       return
     }
-  }, [byteA, byteB])
+    setOutput(toBool(str))
+  }, [str])
 
   return (
     <Stack
@@ -62,11 +54,17 @@ export default function Uint8ArrayConcat() {
           alignSelf: 'center',
         }}
       >
-        <FormControl size='lg' required={true}>
-          <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
+        <FormControl
+          size='lg'
+          required={true}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>unknown</FormLabel>
           <Input
-            name='bytes'
-            placeholder={'12, 34, 56, 78'}
+            name='toBool'
+            placeholder={'Native web3js "unknown" parameter.'}
             onChange={handleChange}
             type='string'
           />
@@ -103,7 +101,7 @@ export default function Uint8ArrayConcat() {
             maxWidth: '90%',
           }}
         >
-          {(output !== undefined && output.toString()) ||
+          {(output && output.toString()) ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

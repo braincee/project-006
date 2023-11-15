@@ -8,38 +8,22 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { uint8ArrayConcat } from 'web3-utils'
+import { Numbers } from 'web3'
+import { toTwosComplement } from 'web3-utils'
 
-export default function Uint8ArrayConcat() {
-  const [byteA, setByteA] = useState<Uint8Array>()
-  const [byteB, setByteB] = useState<Uint8Array>()
+export default function ToTwosComplement() {
+  const [num, setNum] = useState<Numbers>()
+  const [nibbleWidth, setNibbleWidth] = useState<number>(64)
 
-  const [output, setOutput] = useState<boolean>()
-
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (!value || value === '') {
-      setByteA(undefined)
-      return
-    }
-
-    const bytesArray = value
-      .split(',')
-      .map((byte: string) => Number(byte.trim()))
-
-    // finally, convert the array of numbers to a Uint8Array
-    const bytesUint8Array = Uint8Array.from(bytesArray)
-
-    setByteA(bytesUint8Array)
-  }
+  const [output, setOutput] = useState('')
 
   useEffect(() => {
-    if (!byteA || !byteB || byteA.length === 0 || byteB.length === 0) {
-      setOutput(undefined)
+    if (!num || num === '') {
+      setOutput('')
       return
     }
-  }, [byteA, byteB])
+    setOutput(toTwosComplement(num, nibbleWidth))
+  }, [num, nibbleWidth])
 
   return (
     <Stack
@@ -62,13 +46,34 @@ export default function Uint8ArrayConcat() {
           alignSelf: 'center',
         }}
       >
-        <FormControl size='lg' required={true}>
-          <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
+        <FormControl
+          size='lg'
+          required={true}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>Numbers ('string | number | bigInt')</FormLabel>
           <Input
-            name='bytes'
-            placeholder={'12, 34, 56, 78'}
-            onChange={handleChange}
+            name='Numbers'
+            placeholder={'Native web3js "Numbers" parameter.'}
+            onChange={(e) => setNum(e.target.value)}
             type='string'
+          />
+        </FormControl>
+        <FormControl
+          size='lg'
+          required={true}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>num</FormLabel>
+          <Input
+            name='nibbleWidth'
+            placeholder={'Native web3js "" parameter.'}
+            onChange={(e) => setNibbleWidth(Number(e.target.value))}
+            type='number'
           />
         </FormControl>
       </Sheet>
@@ -103,7 +108,7 @@ export default function Uint8ArrayConcat() {
             maxWidth: '90%',
           }}
         >
-          {(output !== undefined && output.toString()) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

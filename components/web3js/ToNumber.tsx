@@ -8,38 +8,31 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { uint8ArrayConcat } from 'web3-utils'
+import { Numbers } from 'web3'
+import { toNumber } from 'web3-utils'
 
-export default function Uint8ArrayConcat() {
-  const [byteA, setByteA] = useState<Uint8Array>()
-  const [byteB, setByteB] = useState<Uint8Array>()
+export default function ToNumber() {
+  const [num, setNum] = useState<Numbers>()
 
-  const [output, setOutput] = useState<boolean>()
+  const [output, setOutput] = useState<number | bigint>()
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setByteA(undefined)
+      setNum(undefined)
       return
     }
-
-    const bytesArray = value
-      .split(',')
-      .map((byte: string) => Number(byte.trim()))
-
-    // finally, convert the array of numbers to a Uint8Array
-    const bytesUint8Array = Uint8Array.from(bytesArray)
-
-    setByteA(bytesUint8Array)
+    setNum(value)
   }
 
   useEffect(() => {
-    if (!byteA || !byteB || byteA.length === 0 || byteB.length === 0) {
+    if (!num || num === '') {
       setOutput(undefined)
       return
     }
-  }, [byteA, byteB])
+    setOutput(toNumber(num))
+  }, [num])
 
   return (
     <Stack
@@ -62,11 +55,17 @@ export default function Uint8ArrayConcat() {
           alignSelf: 'center',
         }}
       >
-        <FormControl size='lg' required={true}>
-          <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
+        <FormControl
+          size='lg'
+          required={true}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>str | Bytes Eg. "12, 34, 56, 78"</FormLabel>
           <Input
-            name='bytes'
-            placeholder={'12, 34, 56, 78'}
+            name='toNumber'
+            placeholder={'Native web3js "str | bytes" parameter.'}
             onChange={handleChange}
             type='string'
           />
@@ -103,7 +102,7 @@ export default function Uint8ArrayConcat() {
             maxWidth: '90%',
           }}
         >
-          {(output !== undefined && output.toString()) ||
+          {(output && output.toString()) ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

@@ -8,19 +8,18 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { uint8ArrayConcat } from 'web3-utils'
+import { toUtf8 } from 'web3-utils'
 
-export default function Uint8ArrayConcat() {
-  const [byteA, setByteA] = useState<Uint8Array>()
-  const [byteB, setByteB] = useState<Uint8Array>()
+export default function ToUtf8() {
+  const [str, setStr] = useState<string | Uint8Array>('')
 
-  const [output, setOutput] = useState<boolean>()
+  const [output, setOutput] = useState('')
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setByteA(undefined)
+      setStr('')
       return
     }
 
@@ -30,16 +29,17 @@ export default function Uint8ArrayConcat() {
 
     // finally, convert the array of numbers to a Uint8Array
     const bytesUint8Array = Uint8Array.from(bytesArray)
-
-    setByteA(bytesUint8Array)
+    setStr(bytesUint8Array)
   }
 
+  str
   useEffect(() => {
-    if (!byteA || !byteB || byteA.length === 0 || byteB.length === 0) {
-      setOutput(undefined)
+    if (!str || str === '') {
+      setOutput('')
       return
     }
-  }, [byteA, byteB])
+    setOutput(toUtf8(str))
+  }, [str])
 
   return (
     <Stack
@@ -62,11 +62,17 @@ export default function Uint8ArrayConcat() {
           alignSelf: 'center',
         }}
       >
-        <FormControl size='lg' required={true}>
-          <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
+        <FormControl
+          size='lg'
+          required={true}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>str | Bytes Eg. "12, 34, 56, 78"</FormLabel>
           <Input
-            name='bytes'
-            placeholder={'12, 34, 56, 78'}
+            name='toUtf8'
+            placeholder={'Native web3js "str | bytes" parameter.'}
             onChange={handleChange}
             type='string'
           />
@@ -103,7 +109,7 @@ export default function Uint8ArrayConcat() {
             maxWidth: '90%',
           }}
         >
-          {(output !== undefined && output.toString()) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>
