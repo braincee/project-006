@@ -25,6 +25,9 @@ import Uint8ArrayConcat from '@/components/web3js/utils/Uint8ArrayConcat'
 import { Stack, Typography } from '@mui/joy'
 import SoliditySha3Raw from '@/components/web3js/utils/SoliditySha3Raw'
 import SoliditySha3 from '@/components/web3js/utils/SoliditySha3'
+import Sha3Raw from '@/components/web3js/utils/Sha3Raw'
+import Sha3 from '@/components/web3js/utils/Sha3'
+import SetRequestIdStart from '@/components/web3js/utils/SetRequestIdStart'
 
 export default async function Web3JsOnline() {
   return (
@@ -53,31 +56,59 @@ export default async function Web3JsOnline() {
       >
         <FunctionContainer
           title='web3.padLeft'
-          description='Adds a padding on the left of a string, if value is a integer or bigInt will be converted to a hex string.'
+          description='Adds a padding on the left of a string, if value is a integer or bigInt will be 
+            converted to a hex string.'
         >
           <PadLeft />
         </FunctionContainer>
         <FunctionContainer
           title='web3.padRight'
-          description='Adds a padding on the right of a string, if value is a integer or bigInt will be converted to a hex string.'
+          description='Adds a padding on the right of a string, if value is a integer or bigInt will be
+           converted to a hex string.'
         >
           <PadRight />
         </FunctionContainer>
         <FunctionContainer
           title='web3.rightPad'
-          description='Adds a padding on the right of a string, if value is a integer or bigInt will be converted to a hex string.'
+          description='Adds a padding on the right of a string, if value is a integer or 
+            bigInt will be converted to a hex string.'
         >
           <RightPad />
         </FunctionContainer>
         <FunctionContainer
+          title='web3.setRequestIdStart'
+          description='Optionally use to make the jsonrpc id start from a specific number. 
+            Without calling this function, the id will be filled with a Uuid. 
+            But after this being called with a number, the id will be a number staring from 
+            the provided start variable. However, if undefined was passed to this function, 
+            the id will be a Uuid again.'
+        >
+          <SetRequestIdStart />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.sha3'
+          description='Computes the Keccak-256 hash of the input and returns a hexstring'
+        >
+          <Sha3 />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.sha3Raw'
+          description='Will calculate the sha3 of the input but does return the hash value instead 
+          of null if for example a empty string is passed.'
+        >
+          <Sha3Raw />
+        </FunctionContainer>
+        <FunctionContainer
           title='web3.soliditySha3'
-          description='Will tightly pack values given in the same way solidity would then hash. returns a hash string, or null if input is empty'
+          description='Will tightly pack values given in the same way solidity would then hash. 
+          returns a hash string, or null if input is empty'
         >
           <SoliditySha3 />
         </FunctionContainer>
         <FunctionContainer
           title='web3.soliditySha3Raw'
-          description='Will tightly pack values given in the same way solidity would then hash. returns a hash string, if input is empty will return 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470'
+          description='Will tightly pack values given in the same way solidity would then hash. returns a hash 
+          string, if input is empty will return 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470'
         >
           <SoliditySha3Raw />
         </FunctionContainer>
@@ -125,14 +156,16 @@ export default async function Web3JsOnline() {
         </FunctionContainer>
         <FunctionContainer
           title='web3.toNumber'
-          description="Convert any given value into it's number representation, if possible, else into it's bigint representation."
+          description="Convert any given value into it's number representation, if possible, 
+          else into it's bigint representation."
         >
           <ToNumber />
         </FunctionContainer>
 
         <FunctionContainer
           title='web3.toTwoComplement'
-          description="Convert a negative number into the two's complement and return a hexstring of 64 nibbles."
+          description="Convert a negative number into the two's complement and return a hexstring 
+          of 64 nibbles."
         >
           <ToTwosComplement />
         </FunctionContainer>

@@ -11,10 +11,6 @@ import {
 import { ReactNode, useEffect, useState } from 'react'
 import { uint8ArrayConcat } from 'web3-utils'
 
-interface part {
-  id: string
-  uint8Array: Uint8Array
-}
 export default function Uint8ArrayConcat() {
   const [byte, setByte] = useState<Uint8Array>()
   const [parts, setParts] = useState(new Map())
@@ -121,7 +117,7 @@ export default function Uint8ArrayConcat() {
           </Button>
         </Stack>
         <FormControl size='lg' required={true}>
-          <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
+          <FormLabel>bytes Eg. "12, 34, 56, 78"</FormLabel>
           <Input
             name='bytes'
             placeholder={'12, 34, 56, 78'}
