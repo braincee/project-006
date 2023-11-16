@@ -23,6 +23,8 @@ import UuidV4 from '@/components/web3js/utils/UuidV4'
 import Uint8ArrayConcat from '@/components/web3js/utils/Uint8ArrayConcat'
 
 import { Stack, Typography } from '@mui/joy'
+import SoliditySha3Raw from '@/components/web3js/utils/SoliditySha3Raw'
+import SoliditySha3 from '@/components/web3js/utils/SoliditySha3'
 
 export default async function Web3JsOnline() {
   return (
@@ -66,6 +68,18 @@ export default async function Web3JsOnline() {
           description='Adds a padding on the right of a string, if value is a integer or bigInt will be converted to a hex string.'
         >
           <RightPad />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.soliditySha3'
+          description='Will tightly pack values given in the same way solidity would then hash. returns a hash string, or null if input is empty'
+        >
+          <SoliditySha3 />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.soliditySha3Raw'
+          description='Will tightly pack values given in the same way solidity would then hash. returns a hash string, if input is empty will return 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470'
+        >
+          <SoliditySha3Raw />
         </FunctionContainer>
         <FunctionContainer
           title='web3.stringToHex'
