@@ -11,9 +11,9 @@ import { useEffect, useState } from 'react'
 import { stringToHex } from 'web3-utils'
 
 export default function StringToHex() {
-  const [str, setStr] = useState('')
+  const [str, setStr] = useState<string >()
 
-  const [output, setOutput] = useState('')
+  const [output, setOutput] = useState<string >()
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
