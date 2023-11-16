@@ -18,23 +18,13 @@ export default function RightPad() {
 
   const [output, setOutput] = useState('')
 
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (!value || value === '') {
-      setVal(undefined)
-      return
-    }
-    setVal(value)
-  }
-
   useEffect(() => {
-    if (!val || val === '' || !charAmt) {
+    if (!val || val === '' || !charAmt || typeof charAmt != 'number') {
       setOutput('')
       return
     }
     setOutput(rightPad(val, charAmt, sign))
-  }, [val])
+  }, [val, charAmt])
 
   return (
     <Stack
@@ -89,7 +79,6 @@ export default function RightPad() {
         </FormControl>
         <FormControl
           size='lg'
-          required={true}
           sx={{
             flexGrow: 1,
           }}
@@ -98,7 +87,7 @@ export default function RightPad() {
           <Input
             name='sign'
             placeholder={'Native web3js "str" parameter.'}
-            onChange={handleChange}
+            onChange={(e) => setSign(e.target.value)}
             type='text'
           />
         </FormControl>

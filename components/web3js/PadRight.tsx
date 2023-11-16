@@ -8,31 +8,23 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { randomHex } from 'web3-utils'
+import { Numbers } from 'web3'
+import { padRight } from 'web3-utils'
 
-export default function RandomHex() {
-  const [byteSize, setByteSize] = useState<number>()
+export default function PadRight() {
+  const [val, setVal] = useState<Numbers>()
+  const [charAmt, setCharAmt] = useState<number>()
+  const [sign, setSign] = useState('0')
 
   const [output, setOutput] = useState('')
 
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (!value || value === '') {
-      setByteSize(undefined)
-      return
-    }
-    setByteSize(value)
-  }
-
   useEffect(() => {
-    if (!byteSize || typeof byteSize != 'number') {
+    if (!val || val === '' || !charAmt || typeof charAmt != 'number') {
       setOutput('')
-
       return
     }
-    setOutput(randomHex(byteSize))
-  }, [byteSize])
+    setOutput(padRight(val, charAmt, sign))
+  }, [val, charAmt])
 
   return (
     <Stack
@@ -62,12 +54,41 @@ export default function RandomHex() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>number</FormLabel>
+          <FormLabel>Numbers ('string | number | bigInt') </FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "number " parameter.'}
-            onChange={handleChange}
+            name='number'
+            placeholder={'Native web3js "Numbers" parameter.'}
+            onChange={(e) => setVal(e.target.value)}
+            type='string'
+          />
+        </FormControl>
+        <FormControl
+          size='lg'
+          required={true}
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>char Amount</FormLabel>
+          <Input
+            name='charAmt'
+            placeholder={'Native web3js "number" parameter.'}
+            onChange={(e) => setCharAmt(Number(e.target.value))}
             type='number'
+          />
+        </FormControl>
+        <FormControl
+          size='lg'
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>str</FormLabel>
+          <Input
+            name='sign'
+            placeholder={'Native web3js "str" parameter.'}
+            onChange={(e) => setSign(e.target.value)}
+            type='text'
           />
         </FormControl>
       </Sheet>

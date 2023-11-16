@@ -8,31 +8,31 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { randomHex } from 'web3-utils'
+import { randomBytes } from 'web3-utils'
 
-export default function RandomHex() {
-  const [byteSize, setByteSize] = useState<number>()
+export default function RandomBytes() {
+  const [size, setSize] = useState<number>()
 
-  const [output, setOutput] = useState('')
+  const [output, setOutput] = useState<Uint8Array>()
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setByteSize(undefined)
+      setSize(undefined)
       return
     }
-    setByteSize(value)
+    setSize(value)
   }
 
   useEffect(() => {
-    if (!byteSize || typeof byteSize != 'number') {
-      setOutput('')
+    if (!size || typeof size != 'number') {
+      setOutput(undefined)
 
       return
     }
-    setOutput(randomHex(byteSize))
-  }, [byteSize])
+    setOutput(randomBytes(size))
+  }, [size])
 
   return (
     <Stack
@@ -102,7 +102,7 @@ export default function RandomHex() {
             maxWidth: '90%',
           }}
         >
-          {output ||
+          {(output !== undefined && output.toString()) ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

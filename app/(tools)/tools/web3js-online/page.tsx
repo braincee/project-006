@@ -2,6 +2,9 @@ import FunctionContainer from '@/components/FunctionContainer'
 import AsciiToHex from '@/components/web3js/AsciiToHex'
 import BytesToHex from '@/components/web3js/BytesToHex'
 import ConvertScalarValue from '@/components/web3js/ConvertScalarValue'
+import PadLeft from '@/components/web3js/PadLeft'
+import PadRight from '@/components/web3js/PadRight'
+import RightPad from '@/components/web3js/RightPad'
 import StringToHex from '@/components/web3js/StringToHex'
 import ToAscii from '@/components/web3js/ToAscii'
 import ToBigInt from '@/components/web3js/ToBigInt'
@@ -61,38 +64,56 @@ export default async function Web3JsOnline() {
         spacing={2}
       >
         <FunctionContainer
+          title='web3.padLeft'
+          description='Adds a padding on the left of a string, if value is a integer or bigInt will be converted to a hex string.'
+        >
+          <PadLeft />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.padRight'
+          description='Adds a padding on the right of a string, if value is a integer or bigInt will be converted to a hex string.'
+        >
+          <PadRight />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.rightPad'
+          description='Adds a padding on the right of a string, if value is a integer or bigInt will be converted to a hex string.'
+        >
+          <RightPad />
+        </FunctionContainer>
+        <FunctionContainer
           title='web3.stringToHex'
-          description='Auto converts any given value into it’s hex representation.'
+          description='Converts a string to hex'
         >
           <StringToHex />
         </FunctionContainer>
         <FunctionContainer
           title='web3.toAscii'
-          description='Auto converts any given value into it’s hex representation.'
+          description='Converts a string to Ascii'
         >
           <ToAscii />
         </FunctionContainer>
         <FunctionContainer
           title='web3.toBigInt'
-          description='Auto converts any given value into it’s hex representation.'
+          description='Auto converts any given value into it’s bigint representation'
         >
           <ToBigInt />
         </FunctionContainer>
         <FunctionContainer
           title='web3.toBool'
-          description='Auto converts any given value into it’s hex representation.'
+          description='Covert any given value to boolean.'
         >
           <ToBool />
         </FunctionContainer>
         <FunctionContainer
           title='web3.toChecksumAddress'
-          description='Auto converts any given value into it’s hex representation.'
+          description='Convert an upper or lowercase Ethereum address to a checksum address.'
         >
           <ToChecksumAddress />
         </FunctionContainer>
         <FunctionContainer
           title='web3.toDecimal'
-          description='Auto converts any given value into it’s hex representation.'
+          description='Convert a value to it’s number representation.'
         >
           <ToDecimal />
         </FunctionContainer>
