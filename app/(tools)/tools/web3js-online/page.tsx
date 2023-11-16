@@ -20,7 +20,6 @@ import Uint8ArrayEquals from '@/components/web3js/utils/Uint8ArrayEquals'
 import Utf8ToBytes from '@/components/web3js/utils/Utf8ToBytes'
 import Utf8ToHex from '@/components/web3js/utils/Utf8ToHex'
 import UuidV4 from '@/components/web3js/utils/UuidV4'
-import NumberToHex from '@/components/web3js/utils/NumberToHex'
 
 import {
   Accordion,
@@ -38,17 +37,6 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/joy'
-import HexToUtf8 from '@/components/web3js/utils/HexToUtf8'
-import HexToString from '@/components/web3js/utils/HexToString'
-import HexToNumberString from '@/components/web3js/utils/HexToNumberString'
-import HexToNumber from '@/components/web3js/utils/HexToNumber'
-import HexToBytes from '@/components/web3js/utils/HexToBytes'
-import HexToAscii from '@/components/web3js/utils/HexToAscii'
-import FromWei from '@/components/web3js/utils/FromWei'
-import FromUtf8 from '@/components/web3js/utils/FromUtf8'
-import FromDecimal from '@/components/web3js/utils/FromDecimal'
-import FromAscii from '@/components/web3js/utils/FromAscii'
-import BytesToUint8Array from '@/components/web3js/utils/BytesToUint8Array'
 
 export default async function Web3JsOnline() {
   return (
@@ -172,6 +160,18 @@ export default async function Web3JsOnline() {
           <RightPad />
         </FunctionContainer>
         <FunctionContainer
+          title='web3.soliditySha3'
+          description='Will tightly pack values given in the same way solidity would then hash. returns a hash string, or null if input is empty'
+        >
+          <SoliditySha3 />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.soliditySha3Raw'
+          description='Will tightly pack values given in the same way solidity would then hash. returns a hash string, if input is empty will return 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470'
+        >
+          <SoliditySha3Raw />
+        </FunctionContainer>
+        <FunctionContainer
           title='web3.stringToHex'
           description='Converts a string to hex'
         >
@@ -246,6 +246,13 @@ export default async function Web3JsOnline() {
           description='Generate a version 4 (random) uuid '
         >
           <UuidV4 />
+        </FunctionContainer>
+
+        <FunctionContainer
+          title='web3.uint8ArrayConcat'
+          description='Convert a utf8 string to Bytes.'
+        >
+          <Uint8ArrayConcat />
         </FunctionContainer>
 
         <FunctionContainer
