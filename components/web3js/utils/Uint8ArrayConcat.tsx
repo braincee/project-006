@@ -21,14 +21,12 @@ export default function Uint8ArrayConcat() {
   const [bytesArray, setBytesArray] = useState<ReactNode[]>([])
   const [output, setOutput] = useState<Uint8Array>()
 
-  console.log('parts >>>', parts)
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
       setByte(undefined)
       setOutput(undefined)
-      setParts(new Map())
       return
     }
 
@@ -46,8 +44,6 @@ export default function Uint8ArrayConcat() {
       parts.set(event.target.id, bytesUint8Array)
     }
   }
-
-  console.log([...parts.values()])
 
   const addByte = () => {
     let index = bytesArray.length - 1
@@ -69,6 +65,8 @@ export default function Uint8ArrayConcat() {
     let index = bytesArray.length - 1
     const newBytesArray = bytesArray.filter((_, idx: number) => index != idx)
     setBytesArray(newBytesArray)
+    let lastKey = Array.from(parts.keys()).pop()
+    parts.delete(lastKey)
   }
 
   useEffect(() => {
@@ -78,7 +76,7 @@ export default function Uint8ArrayConcat() {
     }
     let newParts = parts.values()
     setOutput(uint8ArrayConcat(...newParts))
-  }, [byte, parts])
+  }, [byte, parts.size])
 
   return (
     <Stack
