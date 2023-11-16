@@ -1,5 +1,6 @@
 'use client'
 import {
+  Button,
   FormControl,
   FormLabel,
   Input,
@@ -7,20 +8,27 @@ import {
   Stack,
   Typography,
 } from '@mui/joy'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { uint8ArrayConcat } from 'web3-utils'
 
+interface part {
+  id: string
+  uint8Array: Uint8Array
+}
 export default function Uint8ArrayConcat() {
-  const [byteA, setByteA] = useState<Uint8Array>()
-  const [byteB, setByteB] = useState<Uint8Array>()
+  const [byte, setByte] = useState<Uint8Array>()
+  const [parts, setParts] = useState(new Map())
+  const [bytesArray, setBytesArray] = useState<ReactNode[]>([])
+  const [output, setOutput] = useState<Uint8Array>()
 
-  const [output, setOutput] = useState<boolean>()
-
+  console.log('parts >>>', parts)
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setByteA(undefined)
+      setByte(undefined)
+      setOutput(undefined)
+      setParts(new Map())
       return
     }
 
@@ -30,16 +38,47 @@ export default function Uint8ArrayConcat() {
 
     // finally, convert the array of numbers to a Uint8Array
     const bytesUint8Array = Uint8Array.from(bytesArray)
+    setByte(bytesUint8Array)
 
-    setByteA(bytesUint8Array)
+    if (parts.has(event.target.id)) {
+      parts.set(event.target.id, bytesUint8Array)
+    } else {
+      parts.set(event.target.id, bytesUint8Array)
+    }
+  }
+
+  console.log([...parts.values()])
+
+  const addByte = () => {
+    let index = bytesArray.length - 1
+    let array = (
+      <FormControl key={index} size='lg' required={true}>
+        <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
+        <Input
+          name='bytes'
+          placeholder={'12, 34, 56, 78'}
+          onChange={handleChange}
+          type='string'
+        />
+      </FormControl>
+    )
+    setBytesArray((prevArray: ReactNode[]) => [...prevArray, array])
+  }
+
+  const removeByte = () => {
+    let index = bytesArray.length - 1
+    const newBytesArray = bytesArray.filter((_, idx: number) => index != idx)
+    setBytesArray(newBytesArray)
   }
 
   useEffect(() => {
-    if (!byteA || !byteB || byteA.length === 0 || byteB.length === 0) {
+    if (!byte || parts.size <= 0) {
       setOutput(undefined)
       return
     }
-  }, [byteA, byteB])
+    let newParts = parts.values()
+    setOutput(uint8ArrayConcat(...newParts))
+  }, [byte, parts])
 
   return (
     <Stack
@@ -62,6 +101,27 @@ export default function Uint8ArrayConcat() {
           alignSelf: 'center',
         }}
       >
+        <Stack
+          sx={{
+            dispaly: 'flex',
+            width: '100%',
+            justifyContent: 'center',
+            gap: {
+              sm: 1,
+              md: 3,
+            },
+          }}
+          direction={{ sm: 'column', md: 'row' }}
+        >
+          <Button onClick={addByte}>Add</Button>
+          <Button
+            disabled={bytesArray.length === 0 ? true : false}
+            color='danger'
+            onClick={removeByte}
+          >
+            Remove
+          </Button>
+        </Stack>
         <FormControl size='lg' required={true}>
           <FormLabel>bytes A Eg. "12, 34, 56, 78"</FormLabel>
           <Input
@@ -69,8 +129,9 @@ export default function Uint8ArrayConcat() {
             placeholder={'12, 34, 56, 78'}
             onChange={handleChange}
             type='string'
-          />
+          />{' '}
         </FormControl>
+        {bytesArray}
       </Sheet>
 
       <Sheet
@@ -103,7 +164,7 @@ export default function Uint8ArrayConcat() {
             maxWidth: '90%',
           }}
         >
-          {(output !== undefined && output.toString()) ||
+          {(output && output.length > 0 && `[${output.toString()}]`) ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

@@ -20,23 +20,9 @@ import Uint8ArrayEquals from '@/components/web3js/utils/Uint8ArrayEquals'
 import Utf8ToBytes from '@/components/web3js/utils/Utf8ToBytes'
 import Utf8ToHex from '@/components/web3js/utils/Utf8ToHex'
 import UuidV4 from '@/components/web3js/utils/UuidV4'
+import Uint8ArrayConcat from '@/components/web3js/utils/Uint8ArrayConcat'
 
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  Divider,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Sheet,
-  Stack,
-  Textarea,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/joy'
+import { Stack, Typography } from '@mui/joy'
 
 export default async function Web3JsOnline() {
   return (
@@ -156,6 +142,13 @@ export default async function Web3JsOnline() {
           description='Generate a version 4 (random) uuid '
         >
           <UuidV4 />
+        </FunctionContainer>
+
+        <FunctionContainer
+          title='web3.uint8ArrayConcat'
+          description='Convert a utf8 string to Bytes.'
+        >
+          <Uint8ArrayConcat />
         </FunctionContainer>
 
         <FunctionContainer
