@@ -8,30 +8,32 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { stringToHex } from 'web3-utils'
+import { hexToNumber } from 'web3-utils'
 
-export default function StringToHex() {
-  const [str, setStr] = useState<string>()
+export default function HexToNumber() {
 
-  const [output, setOutput] = useState<string>()
-
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (!value || value === '') {
-      setStr('')
-      return
-    }
-    setStr(value)
-  }
-
-  useEffect(() => {
-    if (!str || str === '') {
-      setOutput('')
-      return
-    }
-    setOutput(stringToHex(str))
-  }, [str])
+    const [hexValue, setHexValue] = useState<string>('');
+    const [numberValue, setNumberValue] = useState<number | bigint>();
+  
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setHexValue(value);
+    };
+  
+    useEffect(() => {
+      if (!hexValue) {
+        setNumberValue(undefined);
+        return;
+      }
+  
+      try {
+        const convertedNumber = hexToNumber(hexValue);
+        setNumberValue(convertedNumber);
+      } catch (error) {
+        console.error('Error converting hex to number:', error);
+        setNumberValue(undefined);
+      }
+    }, [hexValue]);
 
   return (
     <Stack
@@ -61,10 +63,10 @@ export default function StringToHex() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>str</FormLabel>
+          <FormLabel>hex</FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "str " parameter.'}
+            name='hexToString'
+            placeholder={'Native web3js "hex" parameter.'}
             onChange={handleChange}
             type='text'
           />
@@ -101,7 +103,9 @@ export default function StringToHex() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.toString()) ||
+          {numberValue !== undefined
+            ? numberValue.toString()
+            : 
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

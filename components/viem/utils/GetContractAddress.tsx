@@ -1,4 +1,6 @@
 'use client'
+
+import React, { useState, useEffect } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -6,32 +8,28 @@ import {
   Sheet,
   Stack,
   Typography,
-} from '@mui/joy'
-import { useEffect, useState } from 'react'
-import { stringToHex } from 'web3-utils'
+} from '@mui/joy';
+import { getContractAddress } from 'viem';
 
-export default function StringToHex() {
-  const [str, setStr] = useState<string>()
-
-  const [output, setOutput] = useState<string>()
-
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (!value || value === '') {
-      setStr('')
-      return
-    }
-    setStr(value)
-  }
+export default function GetContractAddress() {
+  const [str, setStr] = useState('');
+  const [output, setOutput] = useState('');
 
   useEffect(() => {
-    if (!str || str === '') {
-      setOutput('')
-      return
-    }
-    setOutput(stringToHex(str))
-  }, [str])
+    if (!str || str === '') return;
+
+    const fetchData = async () => {
+      try {
+        const contractAddress = await getContractAddress(str);
+        setOutput(contractAddress);
+      } catch (error) {
+        console.error('Error fetching contract address:', error);
+        setOutput('Error occurred. Please check the console for details.');
+      }
+    };
+
+    fetchData();
+  }, [str]);
 
   return (
     <Stack
@@ -54,19 +52,13 @@ export default function StringToHex() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
+        <FormControl size="lg" required={true} sx={{ flexGrow: 1 }}>
           <FormLabel>str</FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "str " parameter.'}
-            onChange={handleChange}
-            type='text'
+            name="getContractAddress"
+            placeholder={'Native viem "str" parameter.'}
+            onChange={(e) => setStr(e.target.value)}
+            type="text"
           />
         </FormControl>
       </Sheet>
@@ -87,10 +79,10 @@ export default function StringToHex() {
           alignSelf: 'center',
           borderRadius: 'md',
         }}
-        variant='soft'
+        variant="soft"
       >
         <Typography
-          level='body-md'
+          level="body-md"
           sx={{
             display: 'inline-block',
             whiteSpace: 'nowrap',
@@ -101,10 +93,10 @@ export default function StringToHex() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.toString()) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>
     </Stack>
-  )
+  );
 }

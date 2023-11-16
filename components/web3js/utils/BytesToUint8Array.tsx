@@ -1,4 +1,7 @@
 'use client'
+
+import React, { useState, useEffect } from 'react';
+import { bytesToUint8Array } from 'web3-utils';
 import {
   FormControl,
   FormLabel,
@@ -6,32 +9,31 @@ import {
   Sheet,
   Stack,
   Typography,
-} from '@mui/joy'
-import { useEffect, useState } from 'react'
-import { stringToHex } from 'web3-utils'
+} from '@mui/joy';
 
-export default function StringToHex() {
-  const [str, setStr] = useState<string>()
+export default function BytesToUint8Array () {
 
-  const [output, setOutput] = useState<string>()
+    const [inputValue, setInputValue] = useState<string>('');
+    const [uint8ArrayValue, setUint8ArrayValue] = useState<Uint8Array>();
+  
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
 
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
+      const bytesArray = value.split(',').map((byte: string) => Number(byte.trim()))
 
-    if (!value || value === '') {
-      setStr('')
-      return
-    }
-    setStr(value)
-  }
+      // finally, convert the array of numbers to a Uint8Array
+      const bytesUint8Array = Uint8Array.from(bytesArray)
 
-  useEffect(() => {
-    if (!str || str === '') {
-      setOutput('')
-      return
-    }
-    setOutput(stringToHex(str))
-  }, [str])
+      setInputValue(bytesUint8Array)
+    };
+  
+    useEffect(() => {
+        if (!inputValue) {
+          setUint8ArrayValue(undefined);
+          return;
+        }
+        setUint8ArrayValue(bytesToUint8Array(inputValue));
+      }, [inputValue]);
 
   return (
     <Stack
@@ -54,19 +56,13 @@ export default function StringToHex() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>str</FormLabel>
+        <FormControl size="lg" required={true} sx={{ flexGrow: 1 }}>
+          <FormLabel>Bytes</FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "str " parameter.'}
+            name="bytesToUint8Array"
+            placeholder={'0xab'}
             onChange={handleChange}
-            type='text'
+            type="text"
           />
         </FormControl>
       </Sheet>
@@ -87,10 +83,10 @@ export default function StringToHex() {
           alignSelf: 'center',
           borderRadius: 'md',
         }}
-        variant='soft'
+        variant="soft"
       >
         <Typography
-          level='body-md'
+          level="body-md"
           sx={{
             display: 'inline-block',
             whiteSpace: 'nowrap',
@@ -101,10 +97,14 @@ export default function StringToHex() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.toString()) ||
-            'Output will appear here. You can scroll the text if it becomes too long.'}
+           {uint8ArrayValue ? (
+            <pre>{JSON.stringify([...uint8ArrayValue])}</pre>
+          ) : (
+            'Uint8Array value will appear here'
+          )}
         </Typography>
       </Sheet>
     </Stack>
-  )
-}
+  );
+};
+

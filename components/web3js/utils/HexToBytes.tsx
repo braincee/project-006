@@ -8,30 +8,32 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { stringToHex } from 'web3-utils'
+import { hexToBytes } from 'web3-utils'
 
-export default function StringToHex() {
-  const [str, setStr] = useState<string>()
+export default function HexToBytes() {
 
-  const [output, setOutput] = useState<string>()
-
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (!value || value === '') {
-      setStr('')
-      return
-    }
-    setStr(value)
-  }
-
-  useEffect(() => {
-    if (!str || str === '') {
-      setOutput('')
-      return
-    }
-    setOutput(stringToHex(str))
-  }, [str])
+    const [hexString, setHexString] = useState<string>('');
+    const [byteArray, setByteArray] = useState<Uint8Array>();
+  
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setHexString(value);
+    };
+  
+    useEffect(() => {
+      if (!hexString) {
+        setByteArray(undefined);
+        return;
+      }
+  
+      try {
+        const bytes = hexToBytes(hexString);
+        setByteArray(bytes);
+      } catch (error) {
+        console.error('Error converting hex to bytes:', error);
+        setByteArray(undefined);
+      }
+    }, [hexString]);
 
   return (
     <Stack
@@ -61,10 +63,10 @@ export default function StringToHex() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>str</FormLabel>
+          <FormLabel>hex</FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "str " parameter.'}
+            name='hexToBytes'
+            placeholder={'Native web3js "hex" parameter.'}
             onChange={handleChange}
             type='text'
           />
@@ -101,7 +103,7 @@ export default function StringToHex() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.toString()) ||
+          {byteArray ? JSON.stringify([...byteArray]) : 
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

@@ -1,5 +1,8 @@
 import FunctionContainer from '@/components/FunctionContainer'
-import IsAddressEqual from '@/components/viem/IsAddressEqual'
+import GetAddress from '@/components/viem/utils/GetAddress'
+import GetContractAddress from '@/components/viem/utils/GetContractAddress'
+import IsAddress from '@/components/viem/utils/IsAddress'
+import IsAddressEqual from '@/components/viem/utils/IsAddressEqual'
 import {
     Accordion,
     AccordionDetails,
@@ -46,6 +49,24 @@ export default async function ViemOnline() {
                     description="Checks if the given addresses (checksummed) are equal."
                 >
                     <IsAddressEqual />
+                </FunctionContainer>
+                <FunctionContainer
+                    title="viem.isAddressEqual"
+                    description="Checks the given address(checksummed)"
+                >
+                    <GetAddress />
+                </FunctionContainer>
+                <FunctionContainer
+                    title="viem.getContractAddress"
+                    description="Checks to get the contract address"
+                >
+                   <GetContractAddress />
+                </FunctionContainer>
+                <FunctionContainer
+                    title="viem.isAddressEqual"
+                    description="Checks for validation of address"
+                >
+                    <IsAddress />
                 </FunctionContainer>
             </Stack>
         </Stack>

@@ -8,30 +8,32 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { stringToHex } from 'web3-utils'
+import { hexToString } from 'web3-utils'
 
-export default function StringToHex() {
-  const [str, setStr] = useState<string>()
+export default function HexToString() {
 
-  const [output, setOutput] = useState<string>()
+    const [hexData, setHexData] = useState<string>('');
+    const [output, setOutput] = useState<string>(''); 
 
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (!value || value === '') {
-      setStr('')
-      return
-    }
-    setStr(value)
-  }
-
-  useEffect(() => {
-    if (!str || str === '') {
-      setOutput('')
-      return
-    }
-    setOutput(stringToHex(str))
-  }, [str])
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value;
+      setHexData(value);
+    };
+  
+    useEffect(() => {
+      if (!hexData) {
+        setOutput('');
+        return;
+      }
+  
+      try {
+        const convertedString = hexToString(hexData);
+        setOutput(convertedString);
+      } catch (error) {
+        console.error('Error converting hex to string:', error);
+        setOutput('Error: Invalid hex input');
+      }
+    }, [hexData]);
 
   return (
     <Stack
@@ -61,10 +63,10 @@ export default function StringToHex() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>str</FormLabel>
+          <FormLabel>hex</FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "str " parameter.'}
+            name='hexToString'
+            placeholder={'Native web3js "hex" parameter.'}
             onChange={handleChange}
             type='text'
           />
@@ -101,7 +103,7 @@ export default function StringToHex() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.toString()) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

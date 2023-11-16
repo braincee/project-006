@@ -1,4 +1,7 @@
 'use client'
+
+import React, { useState, useEffect } from 'react';
+import { fromUtf8 } from 'web3-utils';
 import {
   FormControl,
   FormLabel,
@@ -6,32 +9,26 @@ import {
   Sheet,
   Stack,
   Typography,
-} from '@mui/joy'
-import { useEffect, useState } from 'react'
-import { stringToHex } from 'web3-utils'
+} from '@mui/joy';
 
-export default function StringToHex() {
-  const [str, setStr] = useState<string>()
+export default function FromUtf8 () {
 
-  const [output, setOutput] = useState<string>()
+  const [utf8String, setUtf8String] = useState<string>('');
 
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
+  const [hexString, setHexString] = useState<string>('');
 
-    if (!value || value === '') {
-      setStr('')
-      return
-    }
-    setStr(value)
-  }
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setUtf8String(value);
+  };
 
   useEffect(() => {
-    if (!str || str === '') {
-      setOutput('')
-      return
+    if (!utf8String || utf8String === '') {
+      setHexString('');
+      return;
     }
-    setOutput(stringToHex(str))
-  }, [str])
+    setHexString(fromUtf8(utf8String));
+  }, [utf8String]);
 
   return (
     <Stack
@@ -54,19 +51,13 @@ export default function StringToHex() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>str</FormLabel>
+        <FormControl size="lg" required={true} sx={{ flexGrow: 1 }}>
+          <FormLabel>UTF-8 String</FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "str " parameter.'}
-            onChange={handleChange}
-            type='text'
+            name="fromUtf8"
+            placeholder={'Enter a UTF-8 string'}
+            onChange={handleInputChange}
+            type="text"
           />
         </FormControl>
       </Sheet>
@@ -87,10 +78,10 @@ export default function StringToHex() {
           alignSelf: 'center',
           borderRadius: 'md',
         }}
-        variant='soft'
+        variant="soft"
       >
         <Typography
-          level='body-md'
+          level="body-md"
           sx={{
             display: 'inline-block',
             whiteSpace: 'nowrap',
@@ -101,10 +92,10 @@ export default function StringToHex() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.toString()) ||
-            'Output will appear here. You can scroll the text if it becomes too long.'}
+          {hexString || 'Hex representation will appear here'}
         </Typography>
       </Sheet>
     </Stack>
-  )
-}
+  );
+};
+

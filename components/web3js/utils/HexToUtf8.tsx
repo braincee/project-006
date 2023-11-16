@@ -8,12 +8,12 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { stringToHex } from 'web3-utils'
+import { hexToUtf8 } from 'web3-utils'
 
-export default function StringToHex() {
-  const [str, setStr] = useState<string>()
+export default function HexToUtf8() {
+  const [str, setStr] = useState('')
 
-  const [output, setOutput] = useState<string>()
+  const [output, setOutput] = useState<string>('')
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
@@ -22,15 +22,23 @@ export default function StringToHex() {
       setStr('')
       return
     }
-    setStr(value)
+
+    const bytesArray = value
+      .split(',')
+      .map((byte: string) => Number(byte.trim()))
+
+    // finally, convert the array of numbers to a Uint8Array
+    const bytesUint8Array = Uint8Array.from(bytesArray)
+    setStr(bytesUint8Array)
   }
+
 
   useEffect(() => {
     if (!str || str === '') {
       setOutput('')
       return
     }
-    setOutput(stringToHex(str))
+    setOutput(hexToUtf8(str))
   }, [str])
 
   return (
@@ -61,10 +69,10 @@ export default function StringToHex() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>str</FormLabel>
+          <FormLabel>hex</FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "str " parameter.'}
+            name='hexToUtf8'
+            placeholder={'Native web3js "hex" parameter.'}
             onChange={handleChange}
             type='text'
           />
@@ -101,7 +109,7 @@ export default function StringToHex() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.toString()) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

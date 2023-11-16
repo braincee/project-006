@@ -1,4 +1,7 @@
 'use client'
+
+import React, { useState, useEffect } from 'react';
+import { fromAscii } from 'web3-utils';
 import {
   FormControl,
   FormLabel,
@@ -6,32 +9,25 @@ import {
   Sheet,
   Stack,
   Typography,
-} from '@mui/joy'
-import { useEffect, useState } from 'react'
-import { stringToHex } from 'web3-utils'
+} from '@mui/joy';
 
-export default function StringToHex() {
-  const [str, setStr] = useState<string>()
+export default function FromAscii () {
 
-  const [output, setOutput] = useState<string>()
-
-  const handleChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (!value || value === '') {
-      setStr('')
-      return
-    }
-    setStr(value)
-  }
-
-  useEffect(() => {
-    if (!str || str === '') {
-      setOutput('')
-      return
-    }
-    setOutput(stringToHex(str))
-  }, [str])
+    const [asciiText, setAsciiText] = useState('');
+    const [hexResult, setHexResult] = useState('');
+  
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
+      setAsciiText(value);
+    };
+  
+    useEffect(() => {
+      if (!asciiText) {
+        setHexResult('');
+        return;
+      }
+      setHexResult(fromAscii(asciiText));
+    }, [asciiText]);
 
   return (
     <Stack
@@ -54,19 +50,13 @@ export default function StringToHex() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>str</FormLabel>
+        <FormControl size="lg" required={true} sx={{ flexGrow: 1 }}>
+          <FormLabel>Ascii</FormLabel>
           <Input
-            name='stringToHex'
-            placeholder={'Native web3js "str " parameter.'}
+            name="fromAscii"
+            placeholder={'Enter your words'}
             onChange={handleChange}
-            type='text'
+            type="text"
           />
         </FormControl>
       </Sheet>
@@ -87,10 +77,10 @@ export default function StringToHex() {
           alignSelf: 'center',
           borderRadius: 'md',
         }}
-        variant='soft'
+        variant="soft"
       >
         <Typography
-          level='body-md'
+          level="body-md"
           sx={{
             display: 'inline-block',
             whiteSpace: 'nowrap',
@@ -101,10 +91,10 @@ export default function StringToHex() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.toString()) ||
-            'Output will appear here. You can scroll the text if it becomes too long.'}
+          {hexResult || 'Hex representation will appear here'}
         </Typography>
       </Sheet>
     </Stack>
-  )
-}
+  );
+};
+

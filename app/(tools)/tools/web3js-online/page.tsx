@@ -20,14 +20,40 @@ import Uint8ArrayEquals from '@/components/web3js/utils/Uint8ArrayEquals'
 import Utf8ToBytes from '@/components/web3js/utils/Utf8ToBytes'
 import Utf8ToHex from '@/components/web3js/utils/Utf8ToHex'
 import UuidV4 from '@/components/web3js/utils/UuidV4'
-import Uint8ArrayConcat from '@/components/web3js/utils/Uint8ArrayConcat'
-
-import { Stack, Typography } from '@mui/joy'
 import SoliditySha3Raw from '@/components/web3js/utils/SoliditySha3Raw'
 import SoliditySha3 from '@/components/web3js/utils/SoliditySha3'
 import Sha3Raw from '@/components/web3js/utils/Sha3Raw'
 import Sha3 from '@/components/web3js/utils/Sha3'
 import SetRequestIdStart from '@/components/web3js/utils/SetRequestIdStart'
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Button,
+  Divider,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  Sheet,
+  Stack,
+  Textarea,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/joy'
+import BytesToUint8Array from '@/components/web3js/utils/BytesToUint8Array'
+import FromAscii from '@/components/web3js/utils/FromAscii'
+import FromDecimal from '@/components/web3js/utils/FromDecimal'
+import FromUtf8 from '@/components/web3js/utils/FromUtf8'
+import FromWei from '@/components/web3js/utils/FromWei'
+import HexToAscii from '@/components/web3js/utils/HexToAscii'
+import HexToBytes from '@/components/web3js/utils/HexToBytes'
+import HexToNumber from '@/components/web3js/utils/HexToNumber'
+import HexToString from '@/components/web3js/utils/HexToString'
+import HexToNumberString from '@/components/web3js/utils/HexToNumberString'
+import HexToUtf8 from '@/components/web3js/utils/HexToUtf8'
+import NumberToHex from '@/components/web3js/utils/NumberToHex'
+import Uint8ArrayConcat from '@/components/web3js/utils/Uint8ArrayConcat'
 
 export default async function Web3JsOnline() {
   return (
@@ -54,6 +80,78 @@ export default async function Web3JsOnline() {
         overflow={'scroll'}
         spacing={2}
       >
+        <FunctionContainer
+          title='web3.bytesToUint8Array'
+          description='Converts values from bytes to Uint8Array.'
+        >
+          <BytesToUint8Array />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.fromAscii'
+          description='Converts words to a hex representation.'
+        >
+          <FromAscii />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.fromDecimal'
+          description='Converts Decimal to a hex representation.'
+        >
+          <FromDecimal />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.fromUtf8'
+          description='Converts Utf8 string to a hex representation.'
+        >
+          <FromUtf8 />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.fromWei'
+          description='Takes a number of wei and converts it to any other ether unit.'
+        >
+          <FromWei />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.hexToAscii'
+          description='Converts a hex to ascii'
+        >
+          <HexToAscii />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.hexToBytes'
+          description='Converts a hex to bytes'
+        >
+          <HexToBytes />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.hexToNumber'
+          description='Converts a hex to number'
+        >
+          <HexToNumber />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.hexToNumberString'
+          description='Converts a hex to Number string'
+        >
+          <HexToNumberString />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.hexToString'
+          description='Converts a hex to string'
+        >
+          <HexToString />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.hexToUtf8'
+          description='Get utf8 string of hex representation (prefixed by 0x).'
+        >
+          <HexToUtf8 />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.numberToHex'
+          description='Converts a number to Hex'
+        >
+          <NumberToHex />
+        </FunctionContainer>
         <FunctionContainer
           title='web3.padLeft'
           description='Adds a padding on the left of a string, if value is a integer or bigInt will be 
