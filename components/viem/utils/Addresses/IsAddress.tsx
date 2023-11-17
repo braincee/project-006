@@ -24,7 +24,7 @@ export default function IsAddress() {
         setIsValid(isValidAddress);
       } catch (error) {
         console.error('Error checking address validity:', error);
-        setIsValid(false); // Set to false in case of an error
+        setIsValid(false);
       }
     };
 
