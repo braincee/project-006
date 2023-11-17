@@ -54,6 +54,10 @@ import HexToNumberString from '@/components/web3js/utils/HexToNumberString'
 import HexToUtf8 from '@/components/web3js/utils/HexToUtf8'
 import NumberToHex from '@/components/web3js/utils/NumberToHex'
 import Uint8ArrayConcat from '@/components/web3js/utils/Uint8ArrayConcat'
+import RandomBytes from '@/components/web3js/utils/RandomBytes'
+import RandomHex from '@/components/web3js/utils/RandomHex'
+import RejectIfTomeout from '@/components/web3js/utils/RejectIfTimeout'
+import ProcessSolidityEncodePackedArgs from '@/components/web3js/utils/ProcessSolidityEncodePackedArgs'
 
 export default async function Web3JsOnline() {
   return (
@@ -165,6 +169,31 @@ export default async function Web3JsOnline() {
            converted to a hex string.'
         >
           <PadRight />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.processSolidityEncodePackedArgs'
+          description='Returns a string of the tightly packed value given based on the type'
+        >
+          <ProcessSolidityEncodePackedArgs />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.randomBytes'
+          description='Returns a random byte array by the given bytes size'
+        >
+          <RandomBytes />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.randomHex'
+          description='Returns a random hex string by the given bytes size'
+        >
+          <RandomHex />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.randomHex'
+          description='Enforce a timeout on a promise, so that it can be rejected if it takes
+           too long to complete'
+        >
+          <RejectIfTomeout />
         </FunctionContainer>
         <FunctionContainer
           title='web3.rightPad'

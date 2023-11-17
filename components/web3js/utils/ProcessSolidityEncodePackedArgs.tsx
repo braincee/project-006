@@ -10,23 +10,22 @@ import {
   Typography,
 } from '@mui/joy'
 import { ReactNode, useEffect, useState } from 'react'
-import { soliditySha3 } from 'web3-utils'
+import { Sha3Input } from 'web3'
+import { processSolidityEncodePackedArgs } from 'web3-utils'
 
-export default function SoliditySha3() {
-  const [stringObject, setStringObject] = useState('')
-  const [inputId, setInputId] = useState('')
-  const [values, setValues] = useState(new Map())
-  const [bytesArray, setBytesArray] = useState<ReactNode[]>([])
-  const [output, setOutput] = useState<string | undefined>('')
+export default function ProcessSolidityEncodePackedArgs() {
+  const [myArg, setMyArg] = useState<Sha3Input>()
+  const [output, setOutput] = useState<string>('')
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setStringObject('')
+      setMyArg(undefined)
       setOutput('')
       return
     }
+
     function isJsonString(str: string) {
       try {
         JSON.parse(str)
@@ -37,8 +36,7 @@ export default function SoliditySha3() {
     }
 
     if (value === 'true' || value === 'false') {
-      setInputId(event.target.id)
-      setStringObject(value)
+      setMyArg(value)
       return
     } else if (
       typeof value === 'string' &&
@@ -46,8 +44,7 @@ export default function SoliditySha3() {
       value.startsWith('0x') &&
       value.length >= 4
     ) {
-      setStringObject(value)
-      values.set(event.target.id, value)
+      setMyArg(value)
       return
     }
 
@@ -58,46 +55,17 @@ export default function SoliditySha3() {
     )
       return
 
-    setStringObject(value)
     const jsonValue = JSON.parse(value)
-    values.set(event.target.id, jsonValue)
-  }
-
-  const addByte = () => {
-    let index = bytesArray.length - 1
-    let array = (
-      <FormControl key={index} size='lg' required={true}>
-        <FormLabel>Typed Object</FormLabel>
-        <Textarea
-          name='typedObject'
-          placeholder={`{"type": "string", "value": "Hello World" }`}
-          onChange={handleChange}
-          minRows={2}
-        />
-      </FormControl>
-    )
-    setBytesArray((prevArray: ReactNode[]) => [...prevArray, array])
-  }
-
-  const removeByte = () => {
-    let index = bytesArray.length - 1
-    const newBytesArray = bytesArray.filter((_, idx: number) => index != idx)
-    setBytesArray(newBytesArray)
-    let lastKey = Array.from(values.keys()).pop()
-    values.delete(lastKey)
+    setMyArg(jsonValue)
   }
 
   useEffect(() => {
-    if (!stringObject || stringObject === '') {
+    if (!myArg || myArg === '') {
       setOutput('')
       return
     }
-    if (stringObject === 'true' || stringObject === 'false') {
-      values.set(inputId, stringObject)
-    }
-    let newvalues = values.values()
-    setOutput(soliditySha3(...newvalues))
-  }, [stringObject, values.size, inputId])
+    setOutput(processSolidityEncodePackedArgs(myArg))
+  }, [myArg])
 
   return (
     <Stack
@@ -120,27 +88,6 @@ export default function SoliditySha3() {
           alignSelf: 'center',
         }}
       >
-        <Stack
-          sx={{
-            dispaly: 'flex',
-            width: '100%',
-            justifyContent: 'center',
-            gap: {
-              sm: 1,
-              md: 3,
-            },
-          }}
-          direction={{ sm: 'column', md: 'row' }}
-        >
-          <Button onClick={addByte}>Add</Button>
-          <Button
-            disabled={bytesArray.length === 0 ? true : false}
-            color='danger'
-            onClick={removeByte}
-          >
-            Remove
-          </Button>
-        </Stack>
         <FormControl size='lg' required={true}>
           <FormLabel>Typed Object | Numbers | boolean</FormLabel>
           <Input
@@ -150,7 +97,6 @@ export default function SoliditySha3() {
             type='string'
           />
         </FormControl>
-        {bytesArray}
       </Sheet>
 
       <Sheet
