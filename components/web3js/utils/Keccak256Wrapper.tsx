@@ -1,29 +1,60 @@
 'use client'
 import {
+  Button,
   FormControl,
   FormLabel,
   Input,
   Sheet,
   Stack,
+  Textarea,
   Typography,
 } from '@mui/joy'
-import { useEffect, useState } from 'react'
-import { rejectIfTimeout } from 'web3-utils'
+import { ReactNode, useEffect, useState } from 'react'
+import { keccak256Wrapper } from 'web3-utils'
 
-export default function RejectIfTimeout() {
-  const [message, setMessage] = useState('')
-  const [timeout, setTimeout] = useState<number>()
+export default function Keccak256Wrapper() {
+  const [data, setData] = useState<
+    string | number | bigint | Uint8Array | readonly number[]
+  >()
 
-  const [output, setOutput] = useState<any[]>([])
+  const [output, setOutput] = useState('')
 
-  useEffect(() => {
-    if (!message || message === '' || !timeout || typeof timeout != 'number') {
-      setOutput([])
+  const handleChange = (event: React.BaseSyntheticEvent) => {
+    const value = event.target.value
+
+    if (!value || value === '') {
+      setOutput('')
       return
     }
-    const error = new Error(message)
-    setOutput(rejectIfTimeout(timeout, error))
-  }, [message, timeout])
+    if (!value.includes('[') && !value.includes(',')) {
+      setData(value)
+      return
+    }
+    if (
+      (value.includes('[') && !value.includes(']')) ||
+      (value.includes('[') &&
+        value.length > 1 &&
+        Number.isNaN(Number(value.charAt(1))))
+    ) {
+      return
+    }
+
+    const bytesArray = value
+      .split(',')
+      .map((byte: string) => Number(byte.trim()))
+
+    // finally, convert the array of numbers to a Uint8Array
+    const bytesUint8Array = Uint8Array.from(bytesArray)
+    setData(bytesUint8Array)
+  }
+
+  useEffect(() => {
+    if (!data || data === '') {
+      setOutput('')
+      return
+    }
+    setOutput(keccak256Wrapper(data))
+  }, [data])
 
   return (
     <Stack
@@ -46,34 +77,15 @@ export default function RejectIfTimeout() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>timeout</FormLabel>
+        <FormControl size='lg' required={true}>
+          <FormLabel>Data</FormLabel>
           <Input
-            name='timeOut'
-            placeholder={'Native web3js "number" parameter.'}
-            onChange={(e) => setTimeout(Number(e.target.value))}
-            type='number'
-          />
-        </FormControl>
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>Error Message</FormLabel>
-          <Input
-            name='message'
-            placeholder={'Native web3js "str" parameter.'}
-            onChange={(e) => setMessage(e.target.value)}
-            type='text'
+            name='data'
+            placeholder={
+              '"string | number | bigint | Uint8Array | readonly number[]"'
+            }
+            onChange={handleChange}
+            type='string'
           />
         </FormControl>
       </Sheet>
@@ -108,7 +120,7 @@ export default function RejectIfTimeout() {
             maxWidth: '90%',
           }}
         >
-          {(output && `[${output.toString()}]`) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

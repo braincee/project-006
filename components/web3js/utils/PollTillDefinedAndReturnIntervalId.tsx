@@ -8,13 +8,18 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { Timer, pollTillDefinedAndReturnIntervalId } from 'web3-utils'
+import {
+  AsyncFunction,
+  Timer,
+  pollTillDefinedAndReturnIntervalId,
+} from 'web3-utils'
 
-export default function ProcessSolidityEncodePackedArgs() {
-  const [func, setFunc] = useState<any>()
+export default function PollTillDefinedAndReturnIntervalId<T>() {
+  const [func, setFunc] = useState<AsyncFunction<T, unknown>>()
   const [interval, setInterval] = useState<number>()
 
-  const [output, setOutput] = useState<[Promise<unknown>, Timer]>()
+  const [output, setOutput] =
+    useState<[Promise<Exclude<T, undefined>>, Timer]>()
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
@@ -65,7 +70,7 @@ export default function ProcessSolidityEncodePackedArgs() {
           />
         </FormControl>
         <FormControl size='lg' required={true}>
-          <FormLabel>Interval</FormLabel>
+          <FormLabel>Interval in milliseconds</FormLabel>
           <Input
             name='interval'
             placeholder={'Native web3js "number" parameter.'}

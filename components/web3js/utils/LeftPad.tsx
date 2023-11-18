@@ -8,22 +8,23 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { rejectIfTimeout } from 'web3-utils'
+import { Numbers } from 'web3'
+import { leftPad } from 'web3-utils'
 
-export default function RejectIfTimeout() {
-  const [message, setMessage] = useState('')
-  const [timeout, setTimeout] = useState<number>()
+export default function LeftPad() {
+  const [val, setVal] = useState<Numbers>()
+  const [charAmt, setCharAmt] = useState<number>()
+  const [sign, setSign] = useState('0')
 
-  const [output, setOutput] = useState<any[]>([])
+  const [output, setOutput] = useState('')
 
   useEffect(() => {
-    if (!message || message === '' || !timeout || typeof timeout != 'number') {
-      setOutput([])
+    if (!val || val === '' || !charAmt || typeof charAmt != 'number') {
+      setOutput('')
       return
     }
-    const error = new Error(message)
-    setOutput(rejectIfTimeout(timeout, error))
-  }, [message, timeout])
+    setOutput(leftPad(val, charAmt, sign))
+  }, [val, charAmt])
 
   return (
     <Stack
@@ -53,12 +54,12 @@ export default function RejectIfTimeout() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>timeout</FormLabel>
+          <FormLabel>Numbers ('string | number | bigInt') </FormLabel>
           <Input
-            name='timeOut'
-            placeholder={'Native web3js "number" parameter.'}
-            onChange={(e) => setTimeout(Number(e.target.value))}
-            type='number'
+            name='number'
+            placeholder={'Native web3js "Numbers" parameter.'}
+            onChange={(e) => setVal(e.target.value)}
+            type='string'
           />
         </FormControl>
         <FormControl
@@ -68,11 +69,25 @@ export default function RejectIfTimeout() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>Error Message</FormLabel>
+          <FormLabel>char Amount</FormLabel>
           <Input
-            name='message'
+            name='charAmt'
+            placeholder={'Native web3js "number" parameter.'}
+            onChange={(e) => setCharAmt(Number(e.target.value))}
+            type='number'
+          />
+        </FormControl>
+        <FormControl
+          size='lg'
+          sx={{
+            flexGrow: 1,
+          }}
+        >
+          <FormLabel>Sign</FormLabel>
+          <Input
+            name='sign'
             placeholder={'Native web3js "str" parameter.'}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={(e) => setSign(e.target.value)}
             type='text'
           />
         </FormControl>
@@ -108,7 +123,7 @@ export default function RejectIfTimeout() {
             maxWidth: '90%',
           }}
         >
-          {(output && `[${output.toString()}]`) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

@@ -8,10 +8,12 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { waitWithTimeout } from 'web3-utils'
+import { AsyncFunction, waitWithTimeout } from 'web3-utils'
 
-export default function WaitWithTimeout() {
-  const [awaitable, setAwaitable] = useState<any>()
+export default function WaitWithTimeout<T>() {
+  const [awaitable, setAwaitable] = useState<
+    Promise<T> | AsyncFunction<T, unknown>
+  >()
   const [timeout, setTimeout] = useState<number>()
   const [errorMessage, setErrorMessage] = useState('')
 

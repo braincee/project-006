@@ -8,22 +8,31 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { rejectIfTimeout } from 'web3-utils'
+import { AsyncFunction, Timer, rejectIfConditionAtInterval } from 'web3-utils'
 
-export default function RejectIfTimeout() {
-  const [message, setMessage] = useState('')
-  const [timeout, setTimeout] = useState<number>()
+export default function RejectIfConditionAtInterval<T>() {
+  const [cond, setCond] = useState<AsyncFunction<undefined | T, unknown>>()
+  const [interval, setInterval] = useState<number>()
 
-  const [output, setOutput] = useState<any[]>([])
+  const [output, setOutput] = useState<[Timer, Promise<never>]>()
 
-  useEffect(() => {
-    if (!message || message === '' || !timeout || typeof timeout != 'number') {
-      setOutput([])
+  const handleChange = (event: React.BaseSyntheticEvent) => {
+    const value = event.target.value
+
+    if (!value || value === '') {
+      setCond(undefined)
+      setOutput(undefined)
       return
     }
-    const error = new Error(message)
-    setOutput(rejectIfTimeout(timeout, error))
-  }, [message, timeout])
+  }
+
+  useEffect(() => {
+    if (!cond || typeof interval != 'number') {
+      setOutput(undefined)
+      return
+    }
+    setOutput(rejectIfConditionAtInterval(cond, interval))
+  }, [cond, interval])
 
   return (
     <Stack
@@ -53,12 +62,12 @@ export default function RejectIfTimeout() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>timeout</FormLabel>
+          <FormLabel>Async function</FormLabel>
           <Input
-            name='timeOut'
-            placeholder={'Native web3js "number" parameter.'}
-            onChange={(e) => setTimeout(Number(e.target.value))}
-            type='number'
+            name='cond'
+            placeholder={'Async function'}
+            onChange={handleChange}
+            type='string'
           />
         </FormControl>
         <FormControl
@@ -68,12 +77,12 @@ export default function RejectIfTimeout() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>Error Message</FormLabel>
+          <FormLabel>Interval in milliseconds</FormLabel>
           <Input
-            name='message'
+            name='interval'
             placeholder={'Native web3js "str" parameter.'}
-            onChange={(e) => setMessage(e.target.value)}
-            type='text'
+            onChange={(e) => setInterval(Number(e.target.value))}
+            type='number'
           />
         </FormControl>
       </Sheet>

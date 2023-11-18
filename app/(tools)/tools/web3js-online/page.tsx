@@ -56,8 +56,15 @@ import NumberToHex from '@/components/web3js/utils/NumberToHex'
 import Uint8ArrayConcat from '@/components/web3js/utils/Uint8ArrayConcat'
 import RandomBytes from '@/components/web3js/utils/RandomBytes'
 import RandomHex from '@/components/web3js/utils/RandomHex'
-import RejectIfTomeout from '@/components/web3js/utils/RejectIfTimeout'
+import RejectIfTimeout from '@/components/web3js/utils/RejectIfTimeout'
 import ProcessSolidityEncodePackedArgs from '@/components/web3js/utils/ProcessSolidityEncodePackedArgs'
+import WaitWithTimeout from '@/components/web3js/utils/WaitWithTimeout'
+import RejectIfConditionAtInterval from '@/components/web3js/utils/RejectIfConditionAtInterval'
+import PollTillDefined from '@/components/web3js/utils/PollTillDefined'
+import PollTillDefinedAndReturnIntervalId from '@/components/web3js/utils/PollTillDefinedAndReturnIntervalId'
+import MergeDeep from '@/components/web3js/utils/MergeDeep'
+import LeftPad from '@/components/web3js/utils/LeftPad'
+import Keccak256Wrapper from '@/components/web3js/utils/Keccak256Wrapper'
 
 export default async function Web3JsOnline() {
   return (
@@ -151,6 +158,26 @@ export default async function Web3JsOnline() {
           <HexToUtf8 />
         </FunctionContainer>
         <FunctionContainer
+          title='web3.keccak256Wrapper'
+          description='A wrapper for ethereum-cryptography/keccak256 to allow hashing a string 
+            and a bigint in addition to UInt8Array'
+        >
+          <Keccak256Wrapper />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.leftPad'
+          description='Adds a padding on the left of a string, if value is a integer or 
+            bigInt will be converted to a hex string.'
+        >
+          <LeftPad />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.mergeDeep'
+          description='Deep merge two objects.'
+        >
+          <MergeDeep />
+        </FunctionContainer>
+        <FunctionContainer
           title='web3.numberToHex'
           description='Converts a number to Hex'
         >
@@ -171,6 +198,24 @@ export default async function Web3JsOnline() {
           <PadRight />
         </FunctionContainer>
         <FunctionContainer
+          title='web3.pollTillDefined'
+          description='Repeatedly calls an async function with a given interval until the result 
+            of the function is defined (not undefined or null), or until a timeout is reached. 
+            pollTillDefinedAndReturnIntervalId() function should be used instead of pollTillDefined 
+            if you need IntervalId in result. This function will be deprecated in next major release 
+            so use pollTillDefinedAndReturnIntervalId().'
+        >
+          <PollTillDefined />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.pollTillDefinedAndReturnIntervalId'
+          description='Repeatedly calls an async function with a given interval until the result
+            of the function is defined (not undefined or null), or until a timeout is reached. 
+            It returns promise and intervalId.'
+        >
+          <PollTillDefinedAndReturnIntervalId />
+        </FunctionContainer>
+        <FunctionContainer
           title='web3.processSolidityEncodePackedArgs'
           description='Returns a string of the tightly packed value given based on the type'
         >
@@ -189,11 +234,19 @@ export default async function Web3JsOnline() {
           <RandomHex />
         </FunctionContainer>
         <FunctionContainer
-          title='web3.randomHex'
+          title='web3.rejectIfConditionAtInterval'
+          description='Sets an interval that repeatedly executes the given cond function with 
+            the specified interval between each call. If the condition is met, the interval is 
+            cleared and a Promise that rejects with the returned value is returned.'
+        >
+          <RejectIfConditionAtInterval />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.rejectIfTimeout'
           description='Enforce a timeout on a promise, so that it can be rejected if it takes
            too long to complete'
         >
-          <RejectIfTomeout />
+          <RejectIfTimeout />
         </FunctionContainer>
         <FunctionContainer
           title='web3.rightPad'
@@ -312,13 +365,6 @@ export default async function Web3JsOnline() {
         </FunctionContainer>
 
         <FunctionContainer
-          title='web3.uuidV4'
-          description='Generate a version 4 (random) uuid '
-        >
-          <UuidV4 />
-        </FunctionContainer>
-
-        <FunctionContainer
           title='web3.uint8ArrayConcat'
           description='Convert a utf8 string to Bytes.'
         >
@@ -364,6 +410,20 @@ export default async function Web3JsOnline() {
           description='Convert a byte array to a hex string.'
         >
           <BytesToHex />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.uuidV4'
+          description='Generate a version 4 (random) uuid '
+        >
+          <UuidV4 />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.waitWithTimeout'
+          description='Wait for a promise but interrupt it if it did not resolve within a given timeout. 
+            If the timeout reached, before the promise code resolve, either throw an error if an error object 
+            was provided, or return undefined'
+        >
+          <WaitWithTimeout />
         </FunctionContainer>
       </Stack>
     </Stack>

@@ -1,23 +1,20 @@
 'use client'
 import {
-  Button,
   FormControl,
   FormLabel,
   Input,
   Sheet,
   Stack,
-  Textarea,
   Typography,
 } from '@mui/joy'
-import { ReactNode, useEffect, useState } from 'react'
-import { Sha3Input } from 'web3'
-import { pollTillDefined } from 'web3-utils'
+import { useEffect, useState } from 'react'
+import { AsyncFunction, pollTillDefined } from 'web3-utils'
 
-export default function ProcessSolidityEncodePackedArgs() {
-  const [func, setFunc] = useState<any>()
+export default function PollTillDefined<T>() {
+  const [func, setFunc] = useState<AsyncFunction<T, unknown>>()
   const [interval, setInterval] = useState<number>()
 
-  const [output, setOutput] = useState<Promise<any>>()
+  const [output, setOutput] = useState<Promise<Exclude<T, undefined>>>()
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
@@ -68,7 +65,7 @@ export default function ProcessSolidityEncodePackedArgs() {
           />
         </FormControl>
         <FormControl size='lg' required={true}>
-          <FormLabel>Interval</FormLabel>
+          <FormLabel>Interval in milliseconds</FormLabel>
           <Input
             name='interval'
             placeholder={'Native web3js "number" parameter.'}
@@ -108,7 +105,7 @@ export default function ProcessSolidityEncodePackedArgs() {
             maxWidth: '90%',
           }}
         >
-          {output ||
+          {output?.toString() ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

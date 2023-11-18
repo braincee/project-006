@@ -83,7 +83,7 @@ export default function PadRight() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>str</FormLabel>
+          <FormLabel>Sign</FormLabel>
           <Input
             name='sign'
             placeholder={'Native web3js "str" parameter.'}
