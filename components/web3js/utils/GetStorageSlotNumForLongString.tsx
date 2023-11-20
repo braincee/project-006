@@ -8,30 +8,30 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { hexToUtf8 } from 'web3-utils'
+import { getStorageSlotNumForLongString } from 'web3-utils'
 
-export default function HexToUtf8() {
-  const [str, setStr] = useState('')
+export default function IsPromise() {
+  const [mainSlotNumber, setMainSlotNumber] = useState<string | number>()
 
-  const [output, setOutput] = useState<string>('')
+  const [output, setOutput] = useState<string | undefined>('')
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setStr('')
-      return
-    }
-    setStr(value)
-  }
-
-  useEffect(() => {
-    if (!str || str === '') {
       setOutput('')
       return
     }
-    setOutput(hexToUtf8(str))
-  }, [str])
+    setMainSlotNumber(value)
+  }
+
+  useEffect(() => {
+    if (!mainSlotNumber || mainSlotNumber === '') {
+      setOutput('')
+      return
+    }
+    setOutput(getStorageSlotNumForLongString(mainSlotNumber))
+  }, [mainSlotNumber])
 
   return (
     <Stack
@@ -54,19 +54,13 @@ export default function HexToUtf8() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>hex</FormLabel>
+        <FormControl size='lg' required={true}>
+          <FormLabel>MainSlotNumber</FormLabel>
           <Input
-            name='hexToUtf8'
-            placeholder={'Native web3js "hex" parameter.'}
+            name='mainSlotNumber'
+            placeholder={'Native web3js "str | number" parameter.'}
             onChange={handleChange}
-            type='text'
+            type='string'
           />
         </FormControl>
       </Sheet>

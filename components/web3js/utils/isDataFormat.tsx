@@ -22,7 +22,6 @@ export default function IsPromise() {
       setOutput(false)
       return
     }
-    if (typeof value != 'object' || typeof value != 'function') return
     setDataFormat(value)
   }
 

@@ -68,10 +68,10 @@ export default function ToTwosComplement() {
             flexGrow: 1,
           }}
         >
-          <FormLabel>num</FormLabel>
+          <FormLabel>NibbleWidth</FormLabel>
           <Input
             name='nibbleWidth'
-            placeholder={'Native web3js "" parameter.'}
+            placeholder={'Native web3js "number" parameter.'}
             onChange={(e) => setNibbleWidth(Number(e.target.value))}
             type='number'
           />

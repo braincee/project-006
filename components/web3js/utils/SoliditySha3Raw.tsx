@@ -3,7 +3,6 @@ import {
   Button,
   FormControl,
   FormLabel,
-  Input,
   Sheet,
   Stack,
   Textarea,
@@ -52,12 +51,14 @@ export default function SoliditySha3Raw() {
     let index = bytesArray.length - 1
     let array = (
       <FormControl key={index} size='lg' required={true}>
-        <FormLabel>Typed Object</FormLabel>
         <Textarea
           name='typedObject'
           placeholder={`{"type": "string", "value": "Hello World" }`}
           onChange={handleChange}
           minRows={2}
+          sx={{
+            marginTop: 2,
+          }}
         />
       </FormControl>
     )

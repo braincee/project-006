@@ -6,50 +6,72 @@ import {
   Input,
   Sheet,
   Stack,
+  Textarea,
   Typography,
 } from '@mui/joy'
 import { ReactNode, useEffect, useState } from 'react'
-import { uint8ArrayConcat } from 'web3-utils'
+import { encodePacked } from 'web3-utils'
 
-export default function Uint8ArrayConcat() {
-  const [byte, setByte] = useState<Uint8Array>()
-  const [parts, setParts] = useState(new Map())
+export default function EncodePacked() {
+  const [stringObject, setStringObject] = useState('')
+  const [inputId, setInputId] = useState('')
+  const [values, setValues] = useState(new Map())
   const [bytesArray, setBytesArray] = useState<ReactNode[]>([])
-  const [output, setOutput] = useState<Uint8Array>()
+  const [output, setOutput] = useState<string>('')
 
   const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setByte(undefined)
-      setOutput(undefined)
+      setStringObject('')
+      setOutput('')
+      return
+    }
+    function isJsonString(str: string) {
+      try {
+        JSON.parse(str)
+      } catch (e) {
+        return false
+      }
+      return true
+    }
+
+    if (value === 'true' || value === 'false') {
+      setInputId(event.target.id)
+      setStringObject(value)
+      return
+    } else if (
+      typeof value === 'string' &&
+      !isJsonString(value) &&
+      value.startsWith('0x') &&
+      value.length >= 4
+    ) {
+      setStringObject(value)
+      values.set(event.target.id, value)
       return
     }
 
-    const bytesArray = value
-      .split(',')
-      .map((byte: string) => Number(byte.trim()))
+    if (
+      !isJsonString(value) ||
+      !value.includes('"value"') ||
+      !value.includes('"type"')
+    )
+      return
 
-    // finally, convert the array of numbers to a Uint8Array
-    const bytesUint8Array = Uint8Array.from(bytesArray)
-    setByte(bytesUint8Array)
-
-    if (parts.has(event.target.id)) {
-      parts.set(event.target.id, bytesUint8Array)
-    } else {
-      parts.set(event.target.id, bytesUint8Array)
-    }
+    setStringObject(value)
+    const jsonValue = JSON.parse(value)
+    values.set(event.target.id, jsonValue)
   }
 
   const addByte = () => {
     let index = bytesArray.length - 1
     let array = (
       <FormControl key={index} size='lg' required={true}>
-        <Input
-          name='bytes'
-          placeholder={'12, 34, 56, 78'}
+        <Textarea
+          name='typedObject'
+          placeholder={`{"type": "string", "value": "Hello World" }`}
           onChange={handleChange}
-          type='string'
+          minRows={2}
           sx={{
             marginTop: 2,
           }}
@@ -63,18 +85,21 @@ export default function Uint8ArrayConcat() {
     let index = bytesArray.length - 1
     const newBytesArray = bytesArray.filter((_, idx: number) => index != idx)
     setBytesArray(newBytesArray)
-    let lastKey = Array.from(parts.keys()).pop()
-    parts.delete(lastKey)
+    let lastKey = Array.from(values.keys()).pop()
+    values.delete(lastKey)
   }
 
   useEffect(() => {
-    if (!byte || parts.size <= 0) {
-      setOutput(undefined)
+    if (!stringObject || stringObject === '') {
+      setOutput('')
       return
     }
-    let newParts = parts.values()
-    setOutput(uint8ArrayConcat(...newParts))
-  }, [byte, parts.size])
+    if (stringObject === 'true' || stringObject === 'false') {
+      values.set(inputId, stringObject)
+    }
+    let newvalues = values.values()
+    setOutput(encodePacked(...newvalues))
+  }, [stringObject, values.size, inputId])
 
   return (
     <Stack
@@ -119,13 +144,13 @@ export default function Uint8ArrayConcat() {
           </Button>
         </Stack>
         <FormControl size='lg' required={true}>
-          <FormLabel>bytes Eg. "12, 34, 56, 78"</FormLabel>
+          <FormLabel>Typed Object | Numbers | boolean</FormLabel>
           <Input
-            name='bytes'
-            placeholder={'12, 34, 56, 78'}
+            name='typedObject'
+            placeholder={`{"type": "string", "value": "Hello World" }`}
             onChange={handleChange}
             type='string'
-          />{' '}
+          />
         </FormControl>
         {bytesArray}
       </Sheet>
@@ -160,7 +185,7 @@ export default function Uint8ArrayConcat() {
             maxWidth: '90%',
           }}
         >
-          {(output && output.length > 0 && `[${output.toString()}]`) ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>
