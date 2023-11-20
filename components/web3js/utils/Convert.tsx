@@ -6,7 +6,7 @@ import {
   Sheet,
   Stack,
   Typography,
-  Textrea
+  Textarea
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { convert } from 'web3-utils'
