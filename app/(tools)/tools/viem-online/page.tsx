@@ -37,6 +37,9 @@ import Trim from '@/components/viem/utils/Data/Trim'
 import Slice from '@/components/viem/utils/Data/Slice'
 import Pad from '@/components/viem/utils/Data/Pad'
 import FromRlp from '@/components/viem/utils/Encoding/FromRlp'
+import ToBytes from '@/components/viem/utils/Encoding/ToBytes'
+import ToHex from '@/components/viem/utils/Encoding/ToHex'
+import FromHex from '@/components/viem/utils/Encoding/FromHex'
 
 export default async function ViemOnline() {
     return (
@@ -62,6 +65,24 @@ export default async function ViemOnline() {
                 overflow={'scroll'}
                 spacing={2}
             >
+                   <FunctionContainer
+                    title="viem.fromHex"
+                    description="Decodes a hex value to a string, number or byte array."
+                >
+                 <FromHex />
+                  </FunctionContainer>
+                   <FunctionContainer
+                    title="viem.toHex"
+                    description="Encodes a string, number, boolean or byte array to a hex value value."
+                >
+                 <ToHex />
+                  </FunctionContainer>
+                 <FunctionContainer
+                    title="viem.toBytes"
+                    description="Encodes a string, hex value, number or boolean to a byte array."
+                >
+                 <ToBytes />
+                  </FunctionContainer>
                   <FunctionContainer
                     title="viem.fromRlp"
                     description="Decodes a Recursive-Length Prefix (RLP) value into a decoded hex value or byte array."
