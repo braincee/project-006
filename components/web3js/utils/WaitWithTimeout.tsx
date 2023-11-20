@@ -5,6 +5,7 @@ import {
   Input,
   Sheet,
   Stack,
+  Textarea,
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
@@ -27,6 +28,8 @@ export default function WaitWithTimeout<T>() {
       setOutput(undefined)
       return
     }
+    let myFunction = value.parseFunction()
+    setAwaitable(myFunction)
   }
 
   useEffect(() => {
@@ -61,11 +64,10 @@ export default function WaitWithTimeout<T>() {
       >
         <FormControl size='lg' required={true}>
           <FormLabel>Async function</FormLabel>
-          <Input
+          <Textarea
             name='func'
             placeholder={'Async function'}
             onChange={handleChange}
-            type='string'
           />
         </FormControl>
         <FormControl size='lg' required={true}>
@@ -75,6 +77,15 @@ export default function WaitWithTimeout<T>() {
             placeholder={'Native web3js "number" parameter.'}
             onChange={(e) => setTimeout(Number(e.target.value))}
             type='number'
+          />
+        </FormControl>
+        <FormControl size='lg'>
+          <FormLabel>Error Message</FormLabel>
+          <Input
+            name='errorMessage'
+            placeholder={'Error message'}
+            onChange={(e) => setErrorMessage(e.target.value)}
+            type='text'
           />
         </FormControl>
       </Sheet>

@@ -24,6 +24,9 @@ export default function RejectIfConditionAtInterval<T>() {
       setOutput(undefined)
       return
     }
+    if (!value.includes('async')) return
+    let myFunction = value.parseFunction()
+    setCond(myFunction)
   }
 
   useEffect(() => {

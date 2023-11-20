@@ -24,6 +24,9 @@ export default function PollTillDefined<T>() {
       setOutput(undefined)
       return
     }
+    if (!value.includes('async')) return
+    let myFunction = value.parseFunction()
+    setFunc(myFunction)
   }
 
   useEffect(() => {

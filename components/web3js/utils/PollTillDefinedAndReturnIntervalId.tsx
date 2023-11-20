@@ -29,6 +29,8 @@ export default function PollTillDefinedAndReturnIntervalId<T>() {
       setOutput(undefined)
       return
     }
+    if (!value.includes('async')) return
+    setFunc(value)
   }
 
   useEffect(() => {
