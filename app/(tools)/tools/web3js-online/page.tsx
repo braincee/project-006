@@ -65,6 +65,22 @@ import PollTillDefinedAndReturnIntervalId from '@/components/web3js/utils/PollTi
 import MergeDeep from '@/components/web3js/utils/MergeDeep'
 import LeftPad from '@/components/web3js/utils/LeftPad'
 import Keccak256Wrapper from '@/components/web3js/utils/Keccak256Wrapper'
+import CheckAddressCheckSum from '@/components/web3js/utils/CheckAddressCheckSum'
+import CompareBlockNumbers from '@/components/web3js/utils/CompareBlockNumbers'
+import Convert from '@/components/web3js/utils/Convert'
+import EncodePacked from '@/components/web3js/utils/encodePacked'
+import Format from '@/components/web3js/utils/Format'
+import FromTwosComplement from '@/components/web3js/utils/FromTwosComplement'
+import GetStorageSlotNumForLongString from '@/components/web3js/utils/GetStorageSlotNumForLongString'
+import IsAddress from '@/components/web3js/utils/IsAddress'
+import IsBloom from '@/components/web3js/utils/IsBloom'
+import IsContractAddressInBloom from '@/components/web3js/utils/IsContractAddressInBloom'
+import IsHex from '@/components/web3js/utils/IsHex'
+import IsHexStrict from '@/components/web3js/utils/IsHexStrict'
+import IsTopic from '@/components/web3js/utils/isTopic'
+import IsTopicInBloom from '@/components/web3js/utils/IsTopicInBloom'
+import IsUserEthereumAddressInBloom from '@/components/web3js/utils/IsUserEthereumAddressInBloom'
+
 
 export default async function Web3JsOnline() {
   return (
@@ -91,6 +107,96 @@ export default async function Web3JsOnline() {
         overflow={'scroll'}
         spacing={2}
       >
+          <FunctionContainer
+          title='web3.isUserEthereumAddressInBloom'
+          description=''
+        >
+          <IsUserEthereumAddressInBloom />
+        </FunctionContainer>
+          <FunctionContainer
+          title='web3.isTopicInBloom'
+          description=''
+        >
+          <IsTopicInBloom />
+        </FunctionContainer>
+          <FunctionContainer
+          title='web3.isTopic'
+          description=''
+        >
+          <IsTopic />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.isHexStrict'
+          description=''
+        >
+          <IsHexStrict />
+        </FunctionContainer>
+      <FunctionContainer
+          title='web3.isHex'
+          description=''
+        >
+          <IsHex />
+        </FunctionContainer>
+       <FunctionContainer
+          title='web3.isContractAddressInBloom'
+          description=''
+        >
+          <IsContractAddressInBloom />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.isBloom'
+          description=''
+        >
+          <IsBloom />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.isAddress'
+          description=''
+        >
+          <IsAddress />
+        </FunctionContainer>
+       <FunctionContainer
+          title='web3.getStorageSlotNumForLongString'
+          description=''
+        >
+          <GetStorageSlotNumForLongString />
+        </FunctionContainer>
+          <FunctionContainer
+          title='web3.fromTwosComplement'
+          description=''
+        >
+          <FromTwosComplement />
+        </FunctionContainer>
+          <FunctionContainer
+          title='web3.format'
+          description=''
+        >
+          <Format />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.encodePacked'
+          description=''
+        >
+          <EncodePacked />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.convert'
+          description=''
+        >
+          <Convert />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.compareBlockNumbers'
+          description=''
+        >
+          <CompareBlockNumbers />
+        </FunctionContainer>
+        <FunctionContainer
+          title='web3.checkAddressCheckSum'
+          description=''
+        >
+          <CheckAddressCheckSum />
+        </FunctionContainer>
         <FunctionContainer
           title='web3.bytesToUint8Array'
           description='Converts values from bytes to Uint8Array.'
