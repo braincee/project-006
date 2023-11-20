@@ -6,24 +6,25 @@ import {
   Sheet,
   Stack,
   Typography,
+  Textarea,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { Numbers } from 'web3'
-import { fromTwosComplement } from 'web3-utils'
+import { BlockNumberOrTag } from 'web3'
+import { compareBlockNumbers } from 'web3-utils'
 
-export default function FromTwosComplement() {
-  const [num, setNum] = useState<Numbers>()
-  const [nibbleWidth, setNibbleWidth] = useState<number>(64)
+export default function CompareBlockNumbers() {
+  const [blockA, setBlockA] = useState<BlockNumberOrTag>('')
+  const [blockB, setBlockB] = useState<BlockNumberOrTag>('')
 
-  const [output, setOutput] = useState<number | bigint>()
+  const [output, setOutput] = useState<number>()
 
   useEffect(() => {
-    if (!num || num === '') {
+    if (!blockA || blockA === '' || !blockB || blockB === '') {
       setOutput(undefined)
       return
     }
-    setOutput(fromTwosComplement(num, nibbleWidth))
-  }, [num, nibbleWidth])
+    setOutput(compareBlockNumbers(blockA, blockB))
+  }, [blockA, blockB])
 
   return (
     <Stack
@@ -46,34 +47,22 @@ export default function FromTwosComplement() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>Numbers ('string | number | bigInt')</FormLabel>
+        <FormControl size='lg' required={true}>
+          <FormLabel>Numbers || BlockTag</FormLabel>
           <Input
-            name='Numbers'
-            placeholder={'Native web3js "Numbers" parameter.'}
-            onChange={(e) => setNum(e.target.value)}
+            name='blockA'
+            placeholder={'Native web3js "Numbers | BlockTag" parameter.'}
+            onChange={(e) => setBlockA(e.target.value)}
             type='string'
           />
         </FormControl>
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>NibbleWidth</FormLabel>
+        <FormControl size='lg' required={true}>
+          <FormLabel>Numbers || BlockTag</FormLabel>
           <Input
-            name='nibbleWidth'
-            placeholder={'Native web3js "number" parameter.'}
-            onChange={(e) => setNibbleWidth(Number(e.target.value))}
-            type='number'
+            name='blockB'
+            placeholder={'Native web3js "Numbers | BlockTag" parameter.'}
+            onChange={(e) => setBlockB(e.target.value)}
+            type='string'
           />
         </FormControl>
       </Sheet>
@@ -108,7 +97,7 @@ export default function FromTwosComplement() {
             maxWidth: '90%',
           }}
         >
-          {output?.toString() ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

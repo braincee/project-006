@@ -8,17 +8,17 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { rejectIfTimeout } from 'web3-utils'
+import { Timer, rejectIfTimeout } from 'web3-utils'
 
 export default function RejectIfTimeout() {
   const [message, setMessage] = useState('')
   const [timeout, setTimeout] = useState<number>()
 
-  const [output, setOutput] = useState<any[]>([])
+  const [output, setOutput] = useState<[Timer, Promise<never>]>()
 
   useEffect(() => {
     if (!message || message === '' || !timeout || typeof timeout != 'number') {
-      setOutput([])
+      setOutput(undefined)
       return
     }
     const error = new Error(message)

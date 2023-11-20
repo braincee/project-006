@@ -8,22 +8,31 @@ import {
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { Numbers } from 'web3'
-import { fromTwosComplement } from 'web3-utils'
+import { isAddress } from 'web3-utils'
 
-export default function FromTwosComplement() {
-  const [num, setNum] = useState<Numbers>()
-  const [nibbleWidth, setNibbleWidth] = useState<number>(64)
+export default function IsAddress() {
+  const [dataFormat, setDataFormat] = useState<unknown>()
 
-  const [output, setOutput] = useState<number | bigint>()
+  const [output, setOutput] = useState<boolean>()
 
-  useEffect(() => {
-    if (!num || num === '') {
-      setOutput(undefined)
+  const handleChange = (event: React.BaseSyntheticEvent) => {
+    const value = event.target.value
+
+    if (!value || value === '') {
+      setOutput(false)
       return
     }
-    setOutput(fromTwosComplement(num, nibbleWidth))
-  }, [num, nibbleWidth])
+    if (typeof value != 'object' || typeof value != 'function') return
+    setDataFormat(value)
+  }
+
+  useEffect(() => {
+    if (!dataFormat || dataFormat === '') {
+      setOutput(false)
+      return
+    }
+    setOutput(isBloom(dataFormat))
+  }, [dataFormat])
 
   return (
     <Stack
@@ -46,34 +55,13 @@ export default function FromTwosComplement() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>Numbers ('string | number | bigInt')</FormLabel>
+        <FormControl size='lg' required={true}>
+          <FormLabel>Object | Function</FormLabel>
           <Input
-            name='Numbers'
-            placeholder={'Native web3js "Numbers" parameter.'}
-            onChange={(e) => setNum(e.target.value)}
+            name='object'
+            placeholder={`object || function with then function`}
+            onChange={handleChange}
             type='string'
-          />
-        </FormControl>
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>NibbleWidth</FormLabel>
-          <Input
-            name='nibbleWidth'
-            placeholder={'Native web3js "number" parameter.'}
-            onChange={(e) => setNibbleWidth(Number(e.target.value))}
-            type='number'
           />
         </FormControl>
       </Sheet>
@@ -108,7 +96,7 @@ export default function FromTwosComplement() {
             maxWidth: '90%',
           }}
         >
-          {output?.toString() ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

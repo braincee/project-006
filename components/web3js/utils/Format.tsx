@@ -6,24 +6,38 @@ import {
   Sheet,
   Stack,
   Typography,
+  Textarea,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { Numbers } from 'web3'
-import { fromTwosComplement } from 'web3-utils'
+import { DataFormat, FormatType } from 'web3'
+import { format } from 'web3-utils'
 
-export default function FromTwosComplement() {
-  const [num, setNum] = useState<Numbers>()
-  const [nibbleWidth, setNibbleWidth] = useState<number>(64)
+export default function Format() {
+  const [schema, setSchema] = useState<object>()
+  const [data, setData] = useState('')
+  const [returnFormat, setreturnFormat] = useState('')
 
-  const [output, setOutput] = useState<number | bigint>()
+  const [output, setOutput] = useState('')
 
-  useEffect(() => {
-    if (!num || num === '') {
-      setOutput(undefined)
+  const handleChange = (event: React.BaseSyntheticEvent) => {
+    const value = event.target.value
+
+    if (!value || value === '') {
+      setOutput('')
       return
     }
-    setOutput(fromTwosComplement(num, nibbleWidth))
-  }, [num, nibbleWidth])
+    if (typeof value != 'object' || typeof value != 'function') return
+  }
+
+  useEffect(() => {
+    if (!schema || !data || !returnFormat) {
+      setOutput('')
+      return
+    }
+    setOutput(
+      format(schema, data, returnFormat as unknown as DataFormat) as string
+    )
+  }, [schema, data, returnFormat])
 
   return (
     <Stack
@@ -46,34 +60,30 @@ export default function FromTwosComplement() {
           alignSelf: 'center',
         }}
       >
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>Numbers ('string | number | bigInt')</FormLabel>
+        <FormControl size='lg' required={true}>
+          <FormLabel>Validation Schema | Schema</FormLabel>
+          <Textarea
+            name='schema'
+            placeholder={'Validation Schema | Schema'}
+            onChange={handleChange}
+          />
+        </FormControl>
+        <FormControl size='lg' required={true}>
+          <FormLabel>Data Type</FormLabel>
           <Input
-            name='Numbers'
-            placeholder={'Native web3js "Numbers" parameter.'}
-            onChange={(e) => setNum(e.target.value)}
+            name='data'
+            placeholder={'Data type'}
+            onChange={(e) => setData(e.target.value)}
             type='string'
           />
         </FormControl>
-        <FormControl
-          size='lg'
-          required={true}
-          sx={{
-            flexGrow: 1,
-          }}
-        >
-          <FormLabel>NibbleWidth</FormLabel>
+        <FormControl size='lg' required={true}>
+          <FormLabel>Return Type</FormLabel>
           <Input
-            name='nibbleWidth'
-            placeholder={'Native web3js "number" parameter.'}
-            onChange={(e) => setNibbleWidth(Number(e.target.value))}
-            type='number'
+            name='returnType'
+            placeholder={'Data format'}
+            onChange={(e) => setreturnFormat(e.target.value)}
+            type='string'
           />
         </FormControl>
       </Sheet>
@@ -108,7 +118,7 @@ export default function FromTwosComplement() {
             maxWidth: '90%',
           }}
         >
-          {output?.toString() ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

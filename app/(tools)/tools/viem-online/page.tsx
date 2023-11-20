@@ -37,6 +37,17 @@ import Trim from '@/components/viem/utils/Data/Trim'
 import Slice from '@/components/viem/utils/Data/Slice'
 import Pad from '@/components/viem/utils/Data/Pad'
 import FromRlp from '@/components/viem/utils/Encoding/FromRlp'
+import ToBytes from '@/components/viem/utils/Encoding/ToBytes'
+import ToHex from '@/components/viem/utils/Encoding/ToHex'
+import FromHex from '@/components/viem/utils/Encoding/FromHex'
+import GetEnsAddress from '@/components/viem/ens/GetEnsAddress'
+import GetEnsAvatar from '@/components/viem/ens/GetEnsAvatar'
+import GetEnsName from '@/components/viem/ens/GetEnsName'
+import GetEnsReslover from '@/components/viem/ens/GetEnsResolver'
+import GetEnsText from '@/components/viem/ens/GetEnsText'
+import LabelHash from '@/components/viem/ens/LabelHash'
+import NameHash from '@/components/viem/ens/NameHash'
+import Normalize from '@/components/viem/ens/Normalize'
 
 export default async function ViemOnline() {
     return (
@@ -62,6 +73,72 @@ export default async function ViemOnline() {
                 overflow={'scroll'}
                 spacing={2}
             >
+                   <FunctionContainer
+                    title="viem.normalize"
+                    description="Enter ENS name."
+                >
+                 <Normalize />
+                  </FunctionContainer>
+                  <FunctionContainer
+                    title="viem.NameHash"
+                    description="Hashes ENS name."
+                >
+                 <NameHash />
+                  </FunctionContainer>
+                <FunctionContainer
+                    title="viem.labelHash"
+                    description="Hashes ENS label."
+                >
+                 <LabelHash />
+                  </FunctionContainer>
+                    <FunctionContainer
+                    title="viem.getEnsText"
+                    description="Gets a text record for specified ENS name."
+                >
+                 <GetEnsText />
+                  </FunctionContainer>
+                  <FunctionContainer
+                    title="viem.getEnsResolver"
+                    description="Gets resolver for ENS name."
+                >
+                 <GetEnsReslover />
+                  </FunctionContainer>
+                  <FunctionContainer
+                    title="viem.getEns"
+                    description="Gets primary name for specified address."
+                >
+                 <GetEnsName />
+                  </FunctionContainer>
+                  <FunctionContainer
+                    title="viem.getEnsAvatar"
+                    description="Gets the avatar of an ENS name."
+                >
+                 <GetEnsAvatar />
+                  </FunctionContainer>
+                  <FunctionContainer
+                    title="viem.getEnsAddress"
+                    description="Gets address for ENS name."
+                >
+                 <GetEnsAddress />
+                  </FunctionContainer>
+                   <FunctionContainer
+                    title="viem.fromHex"
+                    description="Decodes a hex value to a string, number or byte array."
+                >
+                 <FromHex />
+                  </FunctionContainer>
+                   <FunctionContainer
+                    title="viem.toHex"
+                    description="Encodes a string, number, boolean or byte array to a hex value value."
+                >
+                 <ToHex />
+                  </FunctionContainer>
+                 <FunctionContainer
+                    title="viem.toBytes"
+                    description="Encodes a string, hex value, number or boolean to a byte array."
+                >
+                 <ToBytes />
+                  </FunctionContainer>
                   <FunctionContainer
                     title="viem.fromRlp"
                     description="Decodes a Recursive-Length Prefix (RLP) value into a decoded hex value or byte array."
