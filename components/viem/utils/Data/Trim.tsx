@@ -87,10 +87,10 @@ export default function Trim() {
         }}
       >
         <FormControl size='lg' required={true}>
-          <FormLabel>hex</FormLabel>
+          <FormLabel>hex | bytes</FormLabel>
           <Input
             name='hex'
-            placeholder={'0xa...'}
+            placeholder={'0xa... | 12, 34, 56, 78'}
             onChange={handleInputChange}
             type='string'
           />

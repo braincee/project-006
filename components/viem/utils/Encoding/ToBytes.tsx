@@ -42,17 +42,17 @@ export default function ToBytes() {
     setInputValue(value)
   }
 
-  function isJsonString(str: string) {
-    try {
-      JSON.parse(str)
-    } catch (e) {
-      return false
-    }
-    return true
-  }
-
   const handleTargetTypeChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
+
+    function isJsonString(str: string) {
+      try {
+        JSON.parse(str)
+      } catch (e) {
+        return false
+      }
+      return true
+    }
 
     if (
       value.startsWith('{') &&
