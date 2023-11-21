@@ -13,7 +13,7 @@ import {
 import { Bytes } from 'web3'
 
 export default function BytesToUint8Array() {
-  const [inputValue, setInputValue] = useState<Bytes>('')
+  const [inputValue, setInputValue] = useState<Bytes>()
   const [uint8ArrayValue, setUint8ArrayValue] = useState<Uint8Array>()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

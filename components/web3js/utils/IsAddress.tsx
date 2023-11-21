@@ -4,51 +4,35 @@ import {
   FormLabel,
   Input,
   Sheet,
-  Typography,
   Stack,
+  Typography,
 } from '@mui/joy'
+import { useEffect, useState } from 'react'
+import { isAddress } from 'web3-utils'
 
-import React, { useState, useEffect } from 'react'
-import { ByteArray, Hex, pad } from 'viem'
+export default function IsAddress() {
+  const [dataFormat, setDataFormat] = useState<unknown>()
 
-export default function Pad() {
-  const [inputValue, setInputValue] = useState<Hex | ByteArray>()
-  const [paddedValue, setPaddedValue] = useState<any>()
+  const [output, setOutput] = useState<boolean>()
 
-  useEffect(() => {
-    if (!inputValue) return
-
-    const padded = pad(inputValue)
-    if (inputValue.toString().startsWith('0x')) {
-      setPaddedValue(padded)
-    } else {
-      setPaddedValue(padded.toString())
-    }
-  }, [inputValue])
-
-  const handleInputChange = (event: React.BaseSyntheticEvent) => {
+  const handleChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setPaddedValue(undefined)
+      setOutput(false)
       return
     }
-    if (value.startsWith('0x')) {
-      setInputValue(value)
-      return
-    }
-
-    if (!value.includes(',') && Number.isNaN(Number(value))) return
-
-    const bytesArray = value
-      .split(',')
-      .map((byte: string) => Number(byte.trim()))
-
-    // finally, convert the array of numbers to a Uint8Array
-    const bytesUint8Array = Uint8Array.from(bytesArray)
-
-    setInputValue(bytesUint8Array)
+    if (typeof value != 'object' || typeof value != 'function') return
+    setDataFormat(value)
   }
+
+  useEffect(() => {
+    if (!dataFormat || dataFormat === '') {
+      setOutput(false)
+      return
+    }
+    setOutput(isBloom(dataFormat))
+  }, [dataFormat])
 
   return (
     <Stack
@@ -72,11 +56,11 @@ export default function Pad() {
         }}
       >
         <FormControl size='lg' required={true}>
-          <FormLabel>hex</FormLabel>
+          <FormLabel>Object | Function</FormLabel>
           <Input
-            name='hex'
-            placeholder={'0xa...'}
-            onChange={handleInputChange}
+            name='object'
+            placeholder={`object || function with then function`}
+            onChange={handleChange}
             type='string'
           />
         </FormControl>
@@ -112,7 +96,7 @@ export default function Pad() {
             maxWidth: '90%',
           }}
         >
-          {paddedValue ||
+          {output ||
             'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
       </Sheet>

@@ -67,16 +67,17 @@ export default function GetContractAddress() {
       setOutput(getContractAddress(opts))
       return
     }
-    let newOpcode = opCode as 'CREATE2'
-    setOutput(
-      getContractAddress({
+    if (opCode && opCode === 'CREATE2') {
+      let newOpcode = opCode as 'CREATE2'
+      const opts = {
         from: newFrom,
         opcode: newOpcode,
         bytecode: newByteCode,
         bytecodeHash: newByteCodeHash,
         salt: newSalt,
-      })
-    )
+      } as GetContractAddressOptions
+      setOutput(getContractAddress(opts))
+    }
   }, [from, nonce, opCode, byteCode, salt])
 
   return (
@@ -105,7 +106,7 @@ export default function GetContractAddress() {
           <Input
             name='from'
             placeholder={'Native viem "str" parameter.'}
-            onChange={(e) => setFrom(e.target.value)}
+            onChange={handleFromChange}
             type='text'
           />
         </FormControl>

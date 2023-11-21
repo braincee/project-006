@@ -71,7 +71,6 @@ import Convert from '@/components/web3js/utils/Convert'
 import Format from '@/components/web3js/utils/Format'
 import FromTwosComplement from '@/components/web3js/utils/FromTwosComplement'
 import GetStorageSlotNumForLongString from '@/components/web3js/utils/GetStorageSlotNumForLongString'
-import IsAddress from '@/components/web3js/utils/IsAddress'
 import IsBloom from '@/components/web3js/utils/IsBloom'
 import IsContractAddressInBloom from '@/components/web3js/utils/IsContractAddressInBloom'
 import IsHex from '@/components/web3js/utils/IsHex'
@@ -122,9 +121,6 @@ export default async function Web3JsOnline() {
         </FunctionContainer>
         <FunctionContainer title='web3.isBloom' description=''>
           <IsBloom />
-        </FunctionContainer>
-        <FunctionContainer title='web3.isAddress' description=''>
-          <IsAddress />
         </FunctionContainer>
         <FunctionContainer
           title='web3.getStorageSlotNumForLongString'
