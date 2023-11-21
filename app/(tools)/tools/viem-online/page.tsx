@@ -45,6 +45,7 @@ import GetEnsText from '@/components/viem/ens/GetEnsText'
 import LabelHash from '@/components/viem/ens/LabelHash'
 import NameHash from '@/components/viem/ens/NameHash'
 import Normalize from '@/components/viem/ens/Normalize'
+import FromBytes from '@/components/viem/utils/Encoding/FromBytes'
 
 export default async function ViemOnline() {
   return (
@@ -112,6 +113,12 @@ export default async function ViemOnline() {
           description='Gets address for ENS name.'
         >
           <GetEnsAddress />
+        </FunctionContainer>
+        <FunctionContainer
+          title='viem.fromBytes'
+          description='Decodes a byte array to a string, hex value, boolean or number.'
+        >
+          <FromBytes />
         </FunctionContainer>
         <FunctionContainer
           title='viem.fromHex'

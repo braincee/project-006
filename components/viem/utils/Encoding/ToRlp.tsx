@@ -6,14 +6,16 @@ import {
   Sheet,
   Typography,
   Stack,
+  Option,
+  Select,
 } from '@mui/joy'
 
 import React, { useState, useEffect } from 'react'
-import { Hex, ToBytesParameters, toBytes } from 'viem'
+import { ByteArray, Hex, toRlp } from 'viem'
 
-export default function ToBytes() {
-  const [inputValue, setInputValue] = useState<string | Hex>()
-  const [targetType, setTargetType] = useState('')
+export default function ToRlp() {
+  const [inputValue, setInputValue] = useState<Hex | ByteArray>()
+  const [valueType, setValueType] = useState('')
   const [result, setResult] = useState<any>()
 
   useEffect(() => {
@@ -23,48 +25,44 @@ export default function ToBytes() {
     }
 
     try {
-      const toOrOptions = targetType as ToBytesParameters | undefined
-      const parsedResult = toBytes(inputValue, toOrOptions)
+      const myValueType = valueType as 'bytes' | 'hex'
+      const parsedResult = toRlp(inputValue, myValueType)
       setResult(parsedResult)
     } catch (error) {
       setResult(undefined)
     }
-  }, [inputValue])
+  }, [inputValue, valueType])
 
-  const handleInputChange = (event: React.BaseSyntheticEvent) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
 
     if (!value || value === '') {
       setResult(undefined)
       return
     }
-
-    setInputValue(value)
-  }
-
-  function isJsonString(str: string) {
-    try {
-      JSON.parse(str)
-    } catch (e) {
-      return false
-    }
-    return true
-  }
-
-  const handleTargetTypeChange = (event: React.BaseSyntheticEvent) => {
-    const value = event.target.value
-
-    if (
-      value.startsWith('{') &&
-      value.endsWith('}') &&
-      value.includes('to') &&
-      value.includes('size') &&
-      isJsonString(value)
-    ) {
-      setTargetType(JSON.parse(value))
-    } else {
+    if (value.startsWith('0x')) {
+      let myValue = value as `0x${string}`
+      setInputValue(myValue)
       return
     }
+
+    if (!value.includes(',') && Number.isNaN(Number(value))) return
+    const bytesArray = value
+      .split(',')
+      .map((byte: string) => Number(byte.trim()))
+
+    // finally, convert the array of numbers to a Uint8Array
+    const bytesUint8Array = Uint8Array.from(bytesArray)
+
+    setInputValue(bytesUint8Array)
+  }
+
+  const handleSelectChange = (
+    event: React.SyntheticEvent | null,
+    newValue: string | null
+  ) => {
+    if (!newValue) return
+    setValueType(newValue)
   }
 
   return (
@@ -89,23 +87,18 @@ export default function ToBytes() {
         }}
       >
         <FormControl size='lg'>
-          <FormLabel>str</FormLabel>
+          <FormLabel>hex | bytes</FormLabel>
           <Input
-            name='str'
-            placeholder={'eg. Hello World, 0xa....'}
+            name='hex'
+            placeholder={'0xa... | 12, 34, 56, 78'}
             onChange={handleInputChange}
             type='string'
           />
         </FormControl>
-        <FormControl size='lg'>
-          <FormLabel>toOrOptions</FormLabel>
-          <Input
-            name='toOrOptions'
-            placeholder={'{"size": 32}'}
-            onChange={handleTargetTypeChange}
-            type='string'
-          />
-        </FormControl>
+        <Select onChange={handleSelectChange}>
+          <Option value='hex'>Hex</Option>
+          <Option value='bytes'>Bytes</Option>
+        </Select>
       </Sheet>
 
       <Sheet
@@ -138,8 +131,7 @@ export default function ToBytes() {
             maxWidth: '90%',
           }}
         >
-          {(result && `Parsed result: ${result}`) ||
-            'Output will appear here. You can scroll the text if it becomes too long.'}
+          {result !== null && <p>Parsed result: {JSON.stringify(result)}</p>}
         </Typography>
       </Sheet>
     </Stack>

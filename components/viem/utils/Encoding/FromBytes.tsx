@@ -9,22 +9,24 @@ import {
 } from '@mui/joy'
 
 import React, { useState, useEffect } from 'react'
-import { Hex, ToBytesParameters, toBytes } from 'viem'
+import { ByteArray, FromBytesParameters, Hex, fromBytes } from 'viem'
 
-export default function ToBytes() {
-  const [inputValue, setInputValue] = useState<string | Hex>()
+export default function FromBytes() {
+  const [inputValue, setInputValue] = useState<ByteArray>()
   const [targetType, setTargetType] = useState('')
   const [result, setResult] = useState<any>()
 
   useEffect(() => {
-    if (!inputValue) {
+    if (!inputValue || !targetType) {
       setResult(undefined)
       return
     }
 
     try {
-      const toOrOptions = targetType as ToBytesParameters | undefined
-      const parsedResult = toBytes(inputValue, toOrOptions)
+      const toOrOptions = targetType as FromBytesParameters<
+        'string' | 'number' | 'bigint' | 'boolean' | 'hex'
+      >
+      const parsedResult = fromBytes(inputValue, toOrOptions)
       setResult(parsedResult)
     } catch (error) {
       setResult(undefined)
@@ -39,21 +41,33 @@ export default function ToBytes() {
       return
     }
 
-    setInputValue(value)
-  }
+    const bytesArray = value
+      .split(',')
+      .map((byte: string) => Number(byte.trim()))
 
-  function isJsonString(str: string) {
-    try {
-      JSON.parse(str)
-    } catch (e) {
-      return false
-    }
-    return true
+    // finally, convert the array of numbers to a Uint8Array
+    const bytesUint8Array = Uint8Array.from(bytesArray)
+
+    setInputValue(bytesUint8Array)
   }
 
   const handleTargetTypeChange = (event: React.BaseSyntheticEvent) => {
     const value = event.target.value
+    if (!value || value === '') {
+      setResult(undefined)
+      return
+    }
 
+    function isJsonString(str: string) {
+      try {
+        JSON.parse(str)
+      } catch (e) {
+        return false
+      }
+      return true
+    }
+
+    let options = ['string', 'hex', 'number', 'bigint', 'boolean']
     if (
       value.startsWith('{') &&
       value.endsWith('}') &&
@@ -62,9 +76,12 @@ export default function ToBytes() {
       isJsonString(value)
     ) {
       setTargetType(JSON.parse(value))
-    } else {
+    }
+    if (!options.includes(value)) {
       return
     }
+
+    setTargetType(value)
   }
 
   return (
@@ -88,20 +105,22 @@ export default function ToBytes() {
           alignSelf: 'center',
         }}
       >
-        <FormControl size='lg'>
-          <FormLabel>str</FormLabel>
+        <FormControl size='lg' required={true}>
+          <FormLabel>ByteArray</FormLabel>
           <Input
-            name='str'
-            placeholder={'eg. Hello World, 0xa....'}
+            name='ByteArray'
+            placeholder={'12, 34, 56, 78'}
             onChange={handleInputChange}
             type='string'
           />
         </FormControl>
-        <FormControl size='lg'>
+        <FormControl size='lg' required={true}>
           <FormLabel>toOrOptions</FormLabel>
           <Input
             name='toOrOptions'
-            placeholder={'{"size": 32}'}
+            placeholder={
+              'string | hex | number | bigint | boolean | {"to": "string", "size": 32}'
+            }
             onChange={handleTargetTypeChange}
             type='string'
           />
