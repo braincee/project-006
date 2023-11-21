@@ -5,6 +5,7 @@ import {
   Input,
   Sheet,
   Stack,
+  Textarea,
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
@@ -66,11 +67,11 @@ export default function RejectIfConditionAtInterval<T>() {
           }}
         >
           <FormLabel>Async function</FormLabel>
-          <Input
+          <Textarea
             name='cond'
             placeholder={'Async function'}
             onChange={handleChange}
-            type='string'
+            minRows={2}
           />
         </FormControl>
         <FormControl

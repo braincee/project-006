@@ -5,6 +5,7 @@ import {
   Input,
   Sheet,
   Stack,
+  Textarea,
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
@@ -60,11 +61,11 @@ export default function PollTillDefined<T>() {
       >
         <FormControl size='lg' required={true}>
           <FormLabel>Async function</FormLabel>
-          <Input
+          <Textarea
             name='func'
             placeholder={'Async function'}
             onChange={handleChange}
-            type='string'
+            minRows={2}
           />
         </FormControl>
         <FormControl size='lg' required={true}>

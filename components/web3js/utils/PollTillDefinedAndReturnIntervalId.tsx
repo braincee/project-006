@@ -5,6 +5,7 @@ import {
   Input,
   Sheet,
   Stack,
+  Textarea,
   Typography,
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
@@ -30,7 +31,8 @@ export default function PollTillDefinedAndReturnIntervalId<T>() {
       return
     }
     if (!value.includes('async')) return
-    setFunc(value)
+    let myFunction = value.parseFunction()
+    setFunc(myFunction)
   }
 
   useEffect(() => {
@@ -64,11 +66,11 @@ export default function PollTillDefinedAndReturnIntervalId<T>() {
       >
         <FormControl size='lg' required={true}>
           <FormLabel>Async function</FormLabel>
-          <Input
+          <Textarea
             name='func'
             placeholder={'Async function'}
             onChange={handleChange}
-            type='string'
+            minRows={2}
           />
         </FormControl>
         <FormControl size='lg' required={true}>
