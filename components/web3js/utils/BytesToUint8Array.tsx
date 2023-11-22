@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { bytesToUint8Array } from 'web3-utils'
+import { Bytes } from 'web3'
 import {
   FormControl,
   FormLabel,
@@ -10,7 +11,6 @@ import {
   Stack,
   Typography,
 } from '@mui/joy'
-import { Bytes } from 'web3'
 
 export default function BytesToUint8Array() {
   const [inputValue, setInputValue] = useState<Bytes>()

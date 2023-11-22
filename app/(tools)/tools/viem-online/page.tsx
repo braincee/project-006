@@ -10,21 +10,24 @@ import ParseEther from '@/components/viem/utils/Units/ParseEther'
 import ParseGwei from '@/components/viem/utils/Units/ParseGwei'
 import ParseUnits from '@/components/viem/utils/Units/ParseUnits'
 
+
+
+
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Button,
-  Divider,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Sheet,
-  Stack,
-  Textarea,
-  ToggleButtonGroup,
-  Typography,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Button,
+    Divider,
+    FormControl,
+    FormHelperText,
+    FormLabel,
+    Input,
+    Sheet,
+    Stack,
+    Textarea,
+    ToggleButtonGroup,
+    Typography,
 } from '@mui/joy'
 import Concat from '@/components/viem/utils/Data/Concat'
 import IsBytes from '@/components/viem/utils/Data/IsBytes'
@@ -48,20 +51,19 @@ import Normalize from '@/components/viem/ens/Normalize'
 import FromBytes from '@/components/viem/utils/Encoding/FromBytes'
 
 export default async function ViemOnline() {
-  return (
-    <Stack
-      direction={{ xs: 'column', md: 'column' }}
-      sx={{
-        height: '100%',
-        width: '100%',
-      }}
-      spacing={2}
-    >
-      <Typography level='h1'>Viem Online</Typography>
-      <Typography level='h2'>
-        All available viem functions will be placed below, each inside a
-        FunctionContainer.
-      </Typography>
+    return (
+        <Stack
+            direction={{ xs: 'column', md: 'column' }}
+            sx={{
+                height: '100%',
+                width: '100%',
+            }}
+            spacing={2}
+        >
+            <Typography level="h1">Viem Online</Typography>
+            <Typography level="h2">
+                All available viem functions will be placed below, each inside a FunctionContainer.
+            </Typography>
 
       <Stack
         direction={{ xs: 'column', md: 'column' }}
@@ -113,12 +115,6 @@ export default async function ViemOnline() {
           description='Gets address for ENS name.'
         >
           <GetEnsAddress />
-        </FunctionContainer>
-        <FunctionContainer
-          title='viem.fromBytes'
-          description='Decodes a byte array to a string, hex value, boolean or number.'
-        >
-          <FromBytes />
         </FunctionContainer>
         <FunctionContainer
           title='viem.fromHex'

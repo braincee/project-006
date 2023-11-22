@@ -24,7 +24,6 @@ import SoliditySha3Raw from '@/components/web3js/utils/SoliditySha3Raw'
 import SoliditySha3 from '@/components/web3js/utils/SoliditySha3'
 import Sha3Raw from '@/components/web3js/utils/Sha3Raw'
 import Sha3 from '@/components/web3js/utils/Sha3'
-import SetRequestIdStart from '@/components/web3js/utils/SetRequestIdStart'
 import {
   Accordion,
   AccordionDetails,
@@ -71,12 +70,6 @@ import Convert from '@/components/web3js/utils/Convert'
 import Format from '@/components/web3js/utils/Format'
 import FromTwosComplement from '@/components/web3js/utils/FromTwosComplement'
 import GetStorageSlotNumForLongString from '@/components/web3js/utils/GetStorageSlotNumForLongString'
-import IsBloom from '@/components/web3js/utils/IsBloom'
-import IsContractAddressInBloom from '@/components/web3js/utils/IsContractAddressInBloom'
-import IsHex from '@/components/web3js/utils/IsHex'
-import IsHexStrict from '@/components/web3js/utils/IsHexStrict'
-import IsTopic from '@/components/web3js/utils/isTopic'
-import IsTopicInBloom from '@/components/web3js/utils/IsTopicInBloom'
 import EncodePacked from '@/components/web3js/utils/EncodePacked'
 
 export default async function Web3JsOnline() {
@@ -104,24 +97,6 @@ export default async function Web3JsOnline() {
         overflow={'scroll'}
         spacing={2}
       >
-        <FunctionContainer title='web3.isTopicInBloom' description=''>
-          <IsTopicInBloom />
-        </FunctionContainer>
-        <FunctionContainer title='web3.isTopic' description=''>
-          <IsTopic />
-        </FunctionContainer>
-        <FunctionContainer title='web3.isHexStrict' description=''>
-          <IsHexStrict />
-        </FunctionContainer>
-        <FunctionContainer title='web3.isHex' description=''>
-          <IsHex />
-        </FunctionContainer>
-        <FunctionContainer title='web3.isContractAddressInBloom' description=''>
-          <IsContractAddressInBloom />
-        </FunctionContainer>
-        <FunctionContainer title='web3.isBloom' description=''>
-          <IsBloom />
-        </FunctionContainer>
         <FunctionContainer
           title='web3.getStorageSlotNumForLongString'
           description=''
@@ -309,16 +284,6 @@ export default async function Web3JsOnline() {
             bigInt will be converted to a hex string.'
         >
           <RightPad />
-        </FunctionContainer>
-        <FunctionContainer
-          title='web3.setRequestIdStart'
-          description='Optionally use to make the jsonrpc id start from a specific number. 
-            Without calling this function, the id will be filled with a Uuid. 
-            But after this being called with a number, the id will be a number staring from 
-            the provided start variable. However, if undefined was passed to this function, 
-            the id will be a Uuid again.'
-        >
-          <SetRequestIdStart />
         </FunctionContainer>
         <FunctionContainer
           title='web3.sha3'
