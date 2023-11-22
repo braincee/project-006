@@ -68,7 +68,6 @@ export default function WaitWithTimeout<T>() {
             name='func'
             placeholder={'Async function'}
             onChange={handleChange}
-            minRows={2}
           />
         </FormControl>
         <FormControl size='lg' required={true}>

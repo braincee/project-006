@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react'
 import { normalize } from 'viem/ens';
 import { publicClient } from './client';
 
-export default function GetEnsReslover() {
+export default function GetEnsResolver() {
 
     const [ensName, setEnsName] = useState<string>('');
     const [resolverAddress, setResolverAddress] = useState<string | null>(null);

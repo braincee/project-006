@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { bytesToUint8Array } from 'web3-utils'
+import React, { useState, useEffect } from 'react';
+import { bytesToUint8Array } from 'web3-utils';
+import { Bytes } from 'web3';
 import {
   FormControl,
   FormLabel,
@@ -9,33 +10,31 @@ import {
   Sheet,
   Stack,
   Typography,
-} from '@mui/joy'
-import { Bytes } from 'web3'
+} from '@mui/joy';
 
-export default function BytesToUint8Array() {
-  const [inputValue, setInputValue] = useState<Bytes>()
-  const [uint8ArrayValue, setUint8ArrayValue] = useState<Uint8Array>()
+export default function BytesToUint8Array () {
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
+    const [inputValue, setInputValue] = useState<Bytes>();
+    const [uint8ArrayValue, setUint8ArrayValue] = useState<Uint8Array>();
+  
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = event.target;
 
-    const bytesArray = value
-      .split(',')
-      .map((byte: string) => Number(byte.trim()))
+      const bytesArray = value.split(',').map((byte: string) => Number(byte.trim()))
 
-    // finally, convert the array of numbers to a Uint8Array
-    const bytesUint8Array = Uint8Array.from(bytesArray)
+      // finally, convert the array of numbers to a Uint8Array
+      const bytesUint8Array = Uint8Array.from(bytesArray)
 
-    setInputValue(bytesUint8Array)
-  }
-
-  useEffect(() => {
-    if (!inputValue) {
-      setUint8ArrayValue(undefined)
-      return
-    }
-    setUint8ArrayValue(bytesToUint8Array(inputValue))
-  }, [inputValue])
+      setInputValue(bytesUint8Array)
+    };
+  
+    useEffect(() => {
+        if (!inputValue) {
+          setUint8ArrayValue(undefined);
+          return;
+        }
+        setUint8ArrayValue(bytesToUint8Array(inputValue));
+      }, [inputValue]);
 
   return (
     <Stack
@@ -58,13 +57,13 @@ export default function BytesToUint8Array() {
           alignSelf: 'center',
         }}
       >
-        <FormControl size='lg' required={true} sx={{ flexGrow: 1 }}>
+        <FormControl size="lg" required={true} sx={{ flexGrow: 1 }}>
           <FormLabel>Bytes</FormLabel>
           <Input
-            name='bytesToUint8Array'
+            name="bytesToUint8Array"
             placeholder={'0xab'}
             onChange={handleChange}
-            type='text'
+            type="text"
           />
         </FormControl>
       </Sheet>
@@ -85,10 +84,10 @@ export default function BytesToUint8Array() {
           alignSelf: 'center',
           borderRadius: 'md',
         }}
-        variant='soft'
+        variant="soft"
       >
         <Typography
-          level='body-md'
+          level="body-md"
           sx={{
             display: 'inline-block',
             whiteSpace: 'nowrap',
@@ -99,7 +98,7 @@ export default function BytesToUint8Array() {
             maxWidth: '90%',
           }}
         >
-          {uint8ArrayValue ? (
+           {uint8ArrayValue ? (
             <pre>{JSON.stringify([...uint8ArrayValue])}</pre>
           ) : (
             'Uint8Array value will appear here'
@@ -107,5 +106,6 @@ export default function BytesToUint8Array() {
         </Typography>
       </Sheet>
     </Stack>
-  )
-}
+  );
+};
+

@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react'
 import { getStorageSlotNumForLongString } from 'web3-utils'
 
-export default function IsPromise() {
+export default function GetStorageSlotNumForLongString() {
   const [mainSlotNumber, setMainSlotNumber] = useState<string | number>()
 
   const [output, setOutput] = useState<string | undefined>('')

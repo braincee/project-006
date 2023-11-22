@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react'
 import { isDataFormat } from 'web3-utils'
 
-export default function IsPromise() {
+export default function IsDataFormat() {
   const [dataFormat, setDataFormat] = useState<unknown>()
 
   const [output, setOutput] = useState<boolean>()
