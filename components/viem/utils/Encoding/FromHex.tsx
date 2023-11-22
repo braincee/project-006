@@ -1,126 +1,165 @@
 'use client'
 import {
-    FormControl,
-    FormLabel,
-    Input,
-    Sheet,
-    Typography,
-    Stack,
-    Option,
-    Select,
+  FormControl,
+  FormLabel,
+  Input,
+  Sheet,
+  Typography,
+  Stack,
+  Option,
+  Select,
 } from '@mui/joy'
 
-import React, { useState, useEffect } from 'react';
-import { fromHex } from 'viem';
-
+import React, { useState, useEffect } from 'react'
+import { Hex, fromHex } from 'viem'
+import { FromHexParameters } from 'viem/_types/utils/encoding/fromHex'
 
 export default function FromHex() {
-    const [inputValue, setInputValue] = useState<string>('');
-    const [result, setResult] = useState<any>(null);
-    const [targetType, setTargetType] = useState<string>('string');
-  
-    useEffect(() => {
-      if (!inputValue) {
-        setResult(null);
-        return;
-      }
-  
+  const [inputValue, setInputValue] = useState<Hex>()
+  const [targetType, setTargetType] = useState('')
+  const [output, setOutput] = useState<any>()
+
+  useEffect(() => {
+    if (!inputValue || !targetType) {
+      setOutput(undefined)
+      return
+    }
+
+    try {
+      const toOrOptions = targetType as FromHexParameters<
+        'string' | 'number' | 'bigint' | 'boolean' | 'bytes'
+      >
+      const parsedResult = fromHex(inputValue, toOrOptions)
+      setOutput(parsedResult)
+    } catch (error) {
+      setOutput(null)
+    }
+  }, [inputValue, targetType])
+
+  const handleInputChange = (event: React.BaseSyntheticEvent) => {
+    const value = event.target.value
+
+    if (!value || value === '') {
+      setOutput(undefined)
+      return
+    }
+
+    if (value.startsWith('0x')) {
+      setInputValue(value)
+      return
+    }
+  }
+
+  const handleTargetTypeChange = (event: React.BaseSyntheticEvent) => {
+    const value = event.target.value
+    if (!value || value === '') {
+      setOutput(undefined)
+      return
+    }
+
+    function isJsonString(str: string) {
       try {
-        const parsedResult = fromHex(inputValue, targetType as any);
-        setResult(parsedResult);
-      } catch (error) {
-        setResult(null);
+        JSON.parse(str)
+      } catch (e) {
+        return false
       }
-    }, [inputValue, targetType]);
-  
-    const handleInputChange = (
-      event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-      setInputValue(event.target.value);
-    };
-  
-    const handleTargetTypeChange = (
-      event: React.ChangeEvent<HTMLSelectElement>
-    ) => {
-      setTargetType(event.target.value);
-    };
-  
+      return true
+    }
+
+    let options = ['string', 'hex', 'number', 'bigint', 'boolean']
+    if (
+      value.startsWith('{') &&
+      value.endsWith('}') &&
+      value.includes('to') &&
+      value.includes('size') &&
+      isJsonString(value)
+    ) {
+      setTargetType(JSON.parse(value))
+    }
+    if (!options.includes(value)) {
+      return
+    }
+
+    setTargetType(value)
+  }
+
   return (
     <Stack
-    direction={{
+      direction={{
         sm: 'column',
         md: 'row',
-    }}
-    spacing={2}
-    height={'100%'}
-    alignItems={'center'}
->
-    <Sheet
-        sx={{
-            height: '100%',
-            width: '100%',
-            maxWidth: {
-                md: '50%',
-                sm: '100%',
-            },
-            alignSelf: 'center',
-        }}
+      }}
+      spacing={2}
+      height={'100%'}
+      alignItems={'center'}
     >
-        <FormControl size="lg" required={true}>
-            <FormLabel>hex</FormLabel>
-            <Input
-                name="hex"
-                placeholder={'0xa...'}
-                value={inputValue}
-                onChange={handleInputChange}
-                type="string"
-            />
+      <Sheet
+        sx={{
+          height: '100%',
+          width: '100%',
+          maxWidth: {
+            md: '50%',
+            sm: '100%',
+          },
+          alignSelf: 'center',
+        }}
+      >
+        <FormControl size='lg' required={true}>
+          <FormLabel>hex</FormLabel>
+          <Input
+            name='hex'
+            placeholder={'0xa...'}
+            onChange={handleInputChange}
+            type='string'
+          />
         </FormControl>
-        <Select value={targetType} onChange={handleTargetTypeChange}>
-        <Option value="string">String</Option>
-        <Option value="number">Number</Option>
-        <Option value="bigint">BigInt</Option>
-        <Option value="bytes">Byte Array</Option>
-        <Option value="boolean">Boolean</Option>
-        </Select>
-    </Sheet>
+        <FormControl size='lg' required={true}>
+          <FormLabel>toOrOptions</FormLabel>
+          <Input
+            name='toOrOptions'
+            placeholder={
+              'string | hex | number | bigint | boolean | {"to": "string", "size": 32}'
+            }
+            onChange={handleTargetTypeChange}
+            type='string'
+          />
+        </FormControl>
+      </Sheet>
 
-    <Sheet
+      <Sheet
         sx={{
-            height: '100%',
-            minHeight: '100px',
-            width: '100%',
-            maxWidth: {
-                md: '50%',
-                sm: '100%',
-            },
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'center',
-            borderRadius: 'md',
+          height: '100%',
+          minHeight: '100px',
+          width: '100%',
+          maxWidth: {
+            md: '50%',
+            sm: '100%',
+          },
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignSelf: 'center',
+          borderRadius: 'md',
         }}
-        variant="soft"
-    >
+        variant='soft'
+      >
         <Typography
-            level="body-md"
-            sx={{
-                display: 'inline-block',
-                whiteSpace: 'nowrap',
-                overflow: 'scroll',
-                textOverflow: 'ellipsis',
-                wordBreak: 'break-all',
-                wordWrap: 'break-word',
-                maxWidth: '90%',
-            }}
+          level='body-md'
+          sx={{
+            display: 'inline-block',
+            whiteSpace: 'nowrap',
+            overflow: 'scroll',
+            textOverflow: 'ellipsis',
+            wordBreak: 'break-all',
+            wordWrap: 'break-word',
+            maxWidth: '90%',
+          }}
         >
-        {result !== null && (
-          <p>Parsed result: {JSON.stringify(result)}</p>
-        )}
+          {(output && `Parsed result: ${output}`) ||
+            'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
-    </Sheet>
-</Stack>
-  );
+      </Sheet>
+    </Stack>
+  )
 }
-

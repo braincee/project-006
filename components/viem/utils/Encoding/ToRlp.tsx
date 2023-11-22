@@ -6,51 +6,43 @@ import {
   Sheet,
   Typography,
   Stack,
-  Select,
   Option,
-  FormHelperText,
+  Select,
 } from '@mui/joy'
 
 import React, { useState, useEffect } from 'react'
-import { ByteArray, Hex, trim } from 'viem'
+import { ByteArray, Hex, toRlp } from 'viem'
 
-export default function Trim() {
+export default function ToRlp() {
   const [inputValue, setInputValue] = useState<Hex | ByteArray>()
-  const [dir, setDir] = useState('')
-  const [trimmedValue, setTrimmedValue] = useState<any>(null)
+  const [valueType, setValueType] = useState('')
+  const [result, setResult] = useState<any>()
 
   useEffect(() => {
     if (!inputValue) {
-      setTrimmedValue(null)
+      setResult(undefined)
       return
     }
 
     try {
-      const myDir = dir as 'left' | 'right'
-      const trimmed = trim(inputValue, { dir: myDir })
-      setTrimmedValue(trimmed)
+      const myValueType = valueType as 'bytes' | 'hex'
+      const parsedResult = toRlp(inputValue, myValueType)
+      setResult(parsedResult)
     } catch (error) {
-      setTrimmedValue(null)
+      setResult(undefined)
     }
-  }, [inputValue, dir])
+  }, [inputValue, valueType])
 
-  const handleSelect = (
-    event: React.SyntheticEvent | null,
-    newValue: string | null
-  ) => {
-    if (!newValue) return
-    setDir(newValue)
-  }
-
-  const handleInputChange = (event: React.BaseSyntheticEvent) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
 
     if (!value || value === '') {
-      setTrimmedValue(undefined)
+      setResult(undefined)
       return
     }
     if (value.startsWith('0x')) {
-      setInputValue(value)
+      let myValue = value as `0x${string}`
+      setInputValue(myValue)
       return
     }
 
@@ -63,6 +55,14 @@ export default function Trim() {
     const bytesUint8Array = Uint8Array.from(bytesArray)
 
     setInputValue(bytesUint8Array)
+  }
+
+  const handleSelectChange = (
+    event: React.SyntheticEvent | null,
+    newValue: string | null
+  ) => {
+    if (!newValue) return
+    setValueType(newValue)
   }
 
   return (
@@ -86,7 +86,7 @@ export default function Trim() {
           alignSelf: 'center',
         }}
       >
-        <FormControl size='lg' required={true}>
+        <FormControl size='lg'>
           <FormLabel>hex | bytes</FormLabel>
           <Input
             name='hex'
@@ -95,19 +95,10 @@ export default function Trim() {
             type='string'
           />
         </FormControl>
-        <FormControl size='lg'>
-          <FormLabel>direction</FormLabel>
-          <Select placeholder={'left or right'} onChange={handleSelect}>
-            <Option value={'left'}>LEFT</Option>
-            <Option value={'right'}>RIGHT</Option>
-          </Select>
-          <FormHelperText>
-            <Typography level='body-xs'>
-              The direction in which to trim the zero byte data - either leading
-              (left), or trailing (right).
-            </Typography>
-          </FormHelperText>
-        </FormControl>
+        <Select onChange={handleSelectChange}>
+          <Option value='hex'>Hex</Option>
+          <Option value='bytes'>Bytes</Option>
+        </Select>
       </Sheet>
 
       <Sheet
@@ -140,9 +131,7 @@ export default function Trim() {
             maxWidth: '90%',
           }}
         >
-          {trimmedValue &&
-            (`Trimmed value: ${trimmedValue}` ||
-              'Output will appear here. You can scroll the text if it becomes too long.')}
+          {result !== null && <p>Parsed result: {JSON.stringify(result)}</p>}
         </Typography>
       </Sheet>
     </Stack>

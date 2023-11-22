@@ -1,113 +1,147 @@
 'use client'
 import {
-    FormControl,
-    FormLabel,
-    Input,
-    Sheet,
-    Typography,
-    Stack,
+  FormControl,
+  FormLabel,
+  Input,
+  Sheet,
+  Typography,
+  Stack,
 } from '@mui/joy'
 
-import React, { useState, useEffect } from 'react';
-import { toBytes } from 'viem';
-
+import React, { useState, useEffect } from 'react'
+import { Hex, ToBytesParameters, toBytes } from 'viem'
 
 export default function ToBytes() {
-    const [inputValue, setInputValue] = useState<any>('');
-  const [result, setResult] = useState<Uint8Array | null>(null);
+  const [inputValue, setInputValue] = useState<string | Hex>()
+  const [targetType, setTargetType] = useState('')
+  const [result, setResult] = useState<any>()
 
   useEffect(() => {
-    if (!inputValue && inputValue !== 0 && inputValue !== false) {
-      setResult(null);
-      return;
+    if (!inputValue) {
+      setResult(undefined)
+      return
     }
 
     try {
-      const parsedResult = toBytes(inputValue);
-      setResult(parsedResult);
+      const toOrOptions = targetType as ToBytesParameters | undefined
+      const parsedResult = toBytes(inputValue, toOrOptions)
+      setResult(parsedResult)
     } catch (error) {
-      setResult(null);
+      setResult(undefined)
     }
-  }, [inputValue]);
+  }, [inputValue])
 
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setInputValue(event.target.value);
-  };
+  const handleInputChange = (event: React.BaseSyntheticEvent) => {
+    const value = event.target.value
 
-  
+    if (!value || value === '') {
+      setResult(undefined)
+      return
+    }
+
+    setInputValue(value)
+  }
+
+  const handleTargetTypeChange = (event: React.BaseSyntheticEvent) => {
+    const value = event.target.value
+
+    function isJsonString(str: string) {
+      try {
+        JSON.parse(str)
+      } catch (e) {
+        return false
+      }
+      return true
+    }
+
+    if (
+      value.startsWith('{') &&
+      value.endsWith('}') &&
+      value.includes('to') &&
+      value.includes('size') &&
+      isJsonString(value)
+    ) {
+      setTargetType(JSON.parse(value))
+    } else {
+      return
+    }
+  }
+
   return (
     <Stack
-    direction={{
+      direction={{
         sm: 'column',
         md: 'row',
-    }}
-    spacing={2}
-    height={'100%'}
-    alignItems={'center'}
->
-    <Sheet
-        sx={{
-            height: '100%',
-            width: '100%',
-            maxWidth: {
-                md: '50%',
-                sm: '100%',
-            },
-            alignSelf: 'center',
-        }}
+      }}
+      spacing={2}
+      height={'100%'}
+      alignItems={'center'}
     >
-        <FormControl size="lg" required={true}>
-            <FormLabel>str</FormLabel>
-            <Input
-                name="str"
-                placeholder={'eg. Hello World, 0xa....'}
-                value={inputValue}
-                onChange={handleInputChange}
-                type="string"
-            />
+      <Sheet
+        sx={{
+          height: '100%',
+          width: '100%',
+          maxWidth: {
+            md: '50%',
+            sm: '100%',
+          },
+          alignSelf: 'center',
+        }}
+      >
+        <FormControl size='lg'>
+          <FormLabel>str</FormLabel>
+          <Input
+            name='str'
+            placeholder={'eg. Hello World, 0xa....'}
+            onChange={handleInputChange}
+            type='string'
+          />
         </FormControl>
-    </Sheet>
+        <FormControl size='lg'>
+          <FormLabel>toOrOptions</FormLabel>
+          <Input
+            name='toOrOptions'
+            placeholder={'{"size": 32}'}
+            onChange={handleTargetTypeChange}
+            type='string'
+          />
+        </FormControl>
+      </Sheet>
 
-    <Sheet
+      <Sheet
         sx={{
-            height: '100%',
-            minHeight: '100px',
-            width: '100%',
-            maxWidth: {
-                md: '50%',
-                sm: '100%',
-            },
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            alignSelf: 'center',
-            borderRadius: 'md',
+          height: '100%',
+          minHeight: '100px',
+          width: '100%',
+          maxWidth: {
+            md: '50%',
+            sm: '100%',
+          },
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignSelf: 'center',
+          borderRadius: 'md',
         }}
-        variant="soft"
-    >
+        variant='soft'
+      >
         <Typography
-            level="body-md"
-            sx={{
-                display: 'inline-block',
-                whiteSpace: 'nowrap',
-                overflow: 'scroll',
-                textOverflow: 'ellipsis',
-                wordBreak: 'break-all',
-                wordWrap: 'break-word',
-                maxWidth: '90%',
-            }}
+          level='body-md'
+          sx={{
+            display: 'inline-block',
+            whiteSpace: 'nowrap',
+            overflow: 'scroll',
+            textOverflow: 'ellipsis',
+            wordBreak: 'break-all',
+            wordWrap: 'break-word',
+            maxWidth: '90%',
+          }}
         >
-       {result !== null && (
-          <p>
-            Parsed result: {Array.from(result).join(', ')}
-          </p>
-        )}
+          {(result && `Parsed result: ${result}`) ||
+            'Output will appear here. You can scroll the text if it becomes too long.'}
         </Typography>
-    </Sheet>
-</Stack>
-  );
+      </Sheet>
+    </Stack>
+  )
 }
-
