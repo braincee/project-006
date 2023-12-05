@@ -7,7 +7,6 @@
 6. Make sure you handle what parameters are required, and make sure their in the right format, before calling the web3js/viem function. This is done in the `useEffect` of the component.
 7. Make sure you set `required` on the inputs that are required (most of the are), and not on the ones that are not required (there are some, pay attention).
 
-
 # INFO
 - The web3js functions are listed here: https://docs.web3js.org/api/web3-utils
 - The viem functions are listed here: https://viem.sh/docs/utilities/isAddressEqual.html. The ones in the ENS, ABI and Utilities sections are the ones to implement, start from bottom to top. The ENS section will need you to instantiate a client, make sure you have a global/main client, and not instantiate one in each component.
