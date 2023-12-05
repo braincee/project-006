@@ -51,7 +51,7 @@ export default async function Web3JsFunctionPage() {
       </Typography>
 
       <Typography level='body-md'>
-        Here's an example of how to use the isAddress function:
+        Here's an example of how to use the <strong>isAddress</strong> function:
         <pre>import &#123; isAddress &#125; from 'viem'</pre>
         <pre>const address = '0xa5cc3c03994db5b0d9a5eEdD10Cabab0813678ac'</pre>
         <pre>console.log(isAddress(address)) // true</pre>
