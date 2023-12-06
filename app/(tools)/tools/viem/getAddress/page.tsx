@@ -45,13 +45,13 @@ export default async function Web3JsFunctionPage() {
       </Typography>
 
       <Typography level='body-md'>
-        Here are some examples of how to use the <strong>getAddress</strong>{' '}
+        Here are some examples of how to use the <strong>getAddress</strong>
         function:
         <ul>
           <li>
             <strong>
               getAddress('0xa5cc3c03994db5b0d9a5eEdD10Cabab0813678ac')
-            </strong>{' '}
+            </strong>
             // returns
             <br />
             '0xa5cc3c03994DB5b0d9A5eEdD10CabaB0813678AC'
@@ -59,7 +59,7 @@ export default async function Web3JsFunctionPage() {
           <li>
             <strong>
               getAddress('0x27b1fdb04752bbc536007a920d24acb045561c26', 30)
-            </strong>{' '}
+            </strong>
             // returns <br /> '0x27b1FdB04752BBc536007A920D24ACB045561c26'
           </li>
         </ul>
