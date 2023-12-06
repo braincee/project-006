@@ -28,7 +28,7 @@ export default async function Web3JsFunctionPage() {
               In this example, the <strong>bytesToHex</strong> function takes a byte array represented 
               by the <strong>Uint8Array</strong> constructor and returns its hex string representation, which is <strong>'0x480c'.</strong>
             </Typography>
-            <Stack
+                <Stack
                 direction={{ xs: 'column', md: 'column' }}
                 sx={{
                     height: '100%',
